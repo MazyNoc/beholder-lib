@@ -5,6 +5,7 @@ Populate RecyclerViews easily with Databinding and Beholder.
 
 Usage:
 
+```
 class ListItem1 extends AbstractPresenter(){
 }
 
@@ -28,3 +29,4 @@ basePresenters.add(new listItem4(listItem1Data));
 
 
 recyclerView.setAdapter (new BeholderAdapter(factory, basePresenters, null));
+```

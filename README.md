@@ -15,11 +15,12 @@ factory.registerComponent(
   new ComponentInformation(ListItem2Component.class, R.layout.list_item_2, ListItem2Presenter.class)
 );
 
-factort.registerComponents(
+factory.registerComponents(
   new ComponentInformation(ListItem3Component.class, R.layout.list_item_3, ListItem3Presenter.class),
   new ComponentInformation(ListItem4Component.class, R.layout.list_item_4, ListItem4Presenter.class)
 )
 ```
+
 As you can see, the component is build up of three parts. First is the Component class that provides the binding logic and also normally the callback handlers
 The second part is a layout that utilizes databinding (more about that later)
 The third part is a class that implements the Presenter interface.

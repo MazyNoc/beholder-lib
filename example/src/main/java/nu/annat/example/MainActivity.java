@@ -15,29 +15,34 @@ import nu.annat.example.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements Mockdata.Callback {
 
-	private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-		binding.list.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.list.setLayoutManager(new LinearLayoutManager(this));
+        new Mockdata(this); // simulate data loading from network resource
+    }
 
-		new Mockdata(this);
-	}
+    @Override
+    public void provide(List<Presenter> data) {
+        ComponentFactory factory = getFactory();
+        binding.list.swapAdapter(new BeholderAdapter(factory, data, null), false);
+    }
 
-	@Override
-	public void provide(List<Presenter> data) {
-		ComponentFactory factory = getFactory();
-		binding.list.swapAdapter(new BeholderAdapter(factory, data, null), false);
-	}
+    private ComponentFactory getFactory() {
+        // you can either send one, many or a collection in the constructor
 
-	private ComponentFactory getFactory() {
-		ComponentFactory factory = new ComponentFactory();
-		factory.registerComponents(
-			new ComponentInfo(SingleLineComponent.class, R.layout.single_line_layout, SingleLineData.class),
-			new ComponentInfo(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class)
-		);
-		return factory;
-	}
+        ComponentFactory factory = new ComponentFactory(
+            new ComponentInfo(SingleLineComponent.class, R.layout.single_line_layout, SingleLineData.class)
+        );
+
+        // or register one, many or a collection through the registerComponent or registerComponents
+        factory.registerComponents(
+            new ComponentInfo(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class)
+        );
+
+        return factory;
+    }
 }

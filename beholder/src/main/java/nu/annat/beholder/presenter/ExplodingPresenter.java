@@ -5,9 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class ExplodingPresenter extends ParentPresenter {
+public class ExplodingPresenter extends AbstractParentPresenter {
 
-	int lastPreparedModCount = 0;
 	protected final ArrayList<Presenter> preparedItems = new ArrayList<>();
 
 	public ExplodingPresenter() {
@@ -25,11 +24,8 @@ public class ExplodingPresenter extends ParentPresenter {
 	}
 
 	public List<Presenter> explode() {
-		if (lastPreparedModCount != modCount) {
-			preparedItems.clear();
-			prepare();
-			lastPreparedModCount = modCount;
-		}
+		preparedItems.clear();
+		prepare(subPresenters());
 		return preparedItems;
 	}
 
@@ -41,8 +37,8 @@ public class ExplodingPresenter extends ParentPresenter {
 		preparedItems.add(presenter);
 	}
 
-	protected void prepare() {
-		for (Presenter presenter : this) {
+	protected void prepare(List<Presenter> presenters) {
+		for (Presenter presenter : presenters) {
 			preparedItems.add(presenter);
 		}
 	}

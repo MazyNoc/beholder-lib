@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nu.annat.beholder.presenter.ParentPresenter;
+import nu.annat.beholder.presenter.ParentPresenterOld;
 import nu.annat.beholder.presenter.Presenter;
 
-public abstract class ComponentFactory {
+public class ComponentFactory {
 
 	private static final String TAG = ComponentFactory.class.getSimpleName();
 	protected Map<Class<? extends Presenter>, ComponentInfo> components = new HashMap<>();
@@ -33,11 +33,11 @@ public abstract class ComponentFactory {
 	public ComponentViewHolder createDeep(int order, Class<? extends Presenter> presenterClass, Presenter presenter, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
 		ComponentViewHolder holder = createView(order, presenterClass, presenter, root, actionHandler);
 		if (bind) holder.setData(presenter, force);
-		if (presenter instanceof ParentPresenter && holder instanceof ComponentGroup) {
-			ParentPresenter parentPresenter = (ParentPresenter) presenter;
+		if (presenter instanceof ParentPresenterOld && holder instanceof ComponentGroup) {
+			ParentPresenterOld parentPresenterOld = (ParentPresenterOld) presenter;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			int childOrder = 0;
-			for (final Presenter component : parentPresenter) {
+			for (final Presenter component : parentPresenterOld) {
 				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, contentGroup, force, true, actionHandler);
 				holder.addChild(deep);
 				contentGroup.addView(deep.itemView);
@@ -79,13 +79,13 @@ public abstract class ComponentFactory {
 			throw new RuntimeException(String.format("Presenter does not fit the layout, holder = %d, presenter = %d", holder.getLayoutId(), presenter.layoutHash()));
 		}
 		holder.setData(presenter, force);
-		if (presenter instanceof ParentPresenter && holder instanceof ComponentGroup) {
-			ParentPresenter parentPresenter = (ParentPresenter) presenter;
+		if (presenter instanceof ParentPresenterOld && holder instanceof ComponentGroup) {
+			ParentPresenterOld parentPresenterOld = (ParentPresenterOld) presenter;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			if (holder.getLayoutId() == presenter.layoutHash()) {
 				List<ComponentViewHolder> children = holder.getChildren();
 				for (int i = 0; i < children.size(); i++) {
-					bindDeep(children.get(i), parentPresenter.get(i), force);
+					bindDeep(children.get(i), parentPresenterOld.get(i), force);
 				}
 			}
 		}
@@ -108,7 +108,7 @@ public abstract class ComponentFactory {
 		return (T) createDeep(0, presenterClass, null, root, false, false, actionHandler);
 	}
 
-	protected static class ComponentInfo {
+	public static class ComponentInfo {
 		public Class<? extends ComponentViewHolder> viewHolder;
 		public int layout;
 		public Class<? extends Presenter> presenter;

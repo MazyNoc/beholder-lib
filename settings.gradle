@@ -1,1 +1,1 @@
-include ':beholder'
+include ':beholder', ':example'

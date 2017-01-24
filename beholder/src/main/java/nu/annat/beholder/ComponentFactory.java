@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +22,29 @@ public class ComponentFactory {
 	private static final String TAG = ComponentFactory.class.getSimpleName();
 	protected Map<Class<? extends Presenter>, ComponentInfo> components = new HashMap<>();
 
+
+	public ComponentFactory() {
+	}
+
+	public ComponentFactory(ComponentInfo... componentInfos) {
+		this();
+		registerComponents(componentInfos);
+	}
+
+	public ComponentFactory(Collection<ComponentInfo> componentInfos) {
+		this();
+		registerComponents(componentInfos);
+	}
+
 	public void registerComponent(ComponentInfo componentInfo) {
 		components.put(componentInfo.presenter, componentInfo);
 	}
 
 	public void registerComponents(ComponentInfo... componentInfos) {
+		registerComponents(Arrays.asList(componentInfos));
+	}
+
+	public void registerComponents(Collection<ComponentInfo> componentInfos) {
 		for (ComponentInfo componentInfo : componentInfos) {
 			registerComponent(componentInfo);
 		}
@@ -74,7 +94,6 @@ public class ComponentFactory {
 	}
 
 	public void bindDeep(ComponentViewHolder holder, Presenter presenter, boolean force) {
-		Log.d(TAG, String.format("holder = %d, presenter = %d", holder.getLayoutId(), presenter.layoutHash()));
 		if (holder.getReuseId() != presenter.deepLayoutHash()) {
 			throw new RuntimeException(String.format("Presenter does not fit the layout, holder = %d, presenter = %d", holder.getLayoutId(), presenter.layoutHash()));
 		}

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import nu.annat.beholder.presenter.Presenter;
+import nu.annat.beholder.presenter.ComponentInfo;
 
-public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends Presenter> extends RecyclerView.ViewHolder {
+public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends RecyclerView.ViewHolder {
 
 	protected final BINDING binding;
 	protected final ActionHandler actionHandler;

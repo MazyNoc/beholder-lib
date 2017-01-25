@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import nu.annat.beholder.presenter.Presenter;
+import nu.annat.beholder.presenter.ComponentInfo;
 
-public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends Presenter> extends ComponentViewHolder<BINDING, PRESENTER> {
+public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends ComponentViewHolder<BINDING, PRESENTER> {
 
 	private List<ComponentViewHolder> children = new ArrayList<>();
 

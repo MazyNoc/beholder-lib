@@ -6,17 +6,17 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import nu.annat.beholder.presenter.Presenter;
+import nu.annat.beholder.presenter.ComponentInfo;
 
 public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 	private static final String TAG = BeholderAdapter.class.getSimpleName();
 
 	private final ActionHandler actionHandler;
-	private final List<Presenter> items;
+	private final List<ComponentInfo> items;
 	private ComponentFactory factory;
-	private SparseArray<Presenter> cachedPresenters = new SparseArray<>();
+	private SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
-	public BeholderAdapter(ComponentFactory factory, List<Presenter> items, ActionHandler actionHandler) {
+	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> items, ActionHandler actionHandler) {
 		this.factory = factory;
 		this.items = items;
 		this.actionHandler = actionHandler;
@@ -29,9 +29,9 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 
 	@Override
 	public int getItemViewType(int position) {
-		Presenter presenter = items.get(position);
-		int deepLayoutHash = presenter.deepLayoutHash();
-		cachedPresenters.put(deepLayoutHash, presenter);
+		ComponentInfo componentInfo = items.get(position);
+		int deepLayoutHash = componentInfo.deepLayoutHash();
+		cachedPresenters.put(deepLayoutHash, componentInfo);
 		return deepLayoutHash;
 	}
 

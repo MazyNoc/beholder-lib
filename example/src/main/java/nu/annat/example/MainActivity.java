@@ -9,8 +9,8 @@ import java.util.List;
 
 import nu.annat.beholder.BeholderAdapter;
 import nu.annat.beholder.ComponentFactory;
-import nu.annat.beholder.ComponentFactory.ComponentInfo;
-import nu.annat.beholder.presenter.Presenter;
+import nu.annat.beholder.ComponentFactory.Component;
+import nu.annat.beholder.presenter.ComponentInfo;
 import nu.annat.example.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements Mockdata.Callback {
@@ -26,23 +26,25 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
     }
 
     @Override
-    public void provide(List<Presenter> data) {
+    public void provide(List<ComponentInfo> data) {
         ComponentFactory factory = getFactory();
         binding.list.swapAdapter(new BeholderAdapter(factory, data, null), false);
     }
 
     private ComponentFactory getFactory() {
-        // you can either send one, many or a collection in the constructor
+        // you can either
+        // er send one, many or a collection in the constructor
 
         ComponentFactory factory = new ComponentFactory(
-            new ComponentInfo(SingleLineComponent.class, R.layout.single_line_layout, SingleLineData.class)
+            new Component(SingleLineComponent.class, R.layout.single_line_layout, SingleLineData.class)
         );
 
         // or register one, many or a collection through the registerComponent or registerComponents
         factory.registerComponents(
-            new ComponentInfo(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class)
+            new Component(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class)
         );
 
         return factory;
     }
+
 }

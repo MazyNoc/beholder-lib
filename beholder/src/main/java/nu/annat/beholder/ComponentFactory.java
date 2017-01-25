@@ -2,7 +2,6 @@ package nu.annat.beholder;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -14,50 +13,61 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nu.annat.beholder.presenter.ParentPresenterOld;
-import nu.annat.beholder.presenter.Presenter;
+import nu.annat.beholder.presenter.ComponentInfo;
+import nu.annat.beholder.presenter.ParentComponentInfoOld;
 
 public class ComponentFactory {
 
 	private static final String TAG = ComponentFactory.class.getSimpleName();
-	protected Map<Class<? extends Presenter>, ComponentInfo> components = new HashMap<>();
+	protected Map<Class<? extends ComponentInfo>, Component> components = new HashMap<>();
 
+	public static class Component {
+		public Class<? extends ComponentViewHolder> viewHolder;
+		public int layout;
+		public Class<? extends ComponentInfo> presenter;
+
+		public Component(Class<? extends ComponentViewHolder> viewHolder, int layout, Class<? extends ComponentInfo> presenter) {
+			this.layout = layout;
+			this.presenter = presenter;
+			this.viewHolder = viewHolder;
+		}
+	}
 
 	public ComponentFactory() {
 	}
 
-	public ComponentFactory(ComponentInfo... componentInfos) {
+	public ComponentFactory(Component... components) {
 		this();
-		registerComponents(componentInfos);
+		registerComponents(components);
 	}
 
-	public ComponentFactory(Collection<ComponentInfo> componentInfos) {
+	public ComponentFactory(Collection<Component> components) {
 		this();
-		registerComponents(componentInfos);
+		registerComponents(components);
 	}
 
-	public void registerComponent(ComponentInfo componentInfo) {
-		components.put(componentInfo.presenter, componentInfo);
+	public void registerComponent(Component component) {
+		components.put(component.presenter, component);
 	}
 
-	public void registerComponents(ComponentInfo... componentInfos) {
-		registerComponents(Arrays.asList(componentInfos));
+	public void registerComponents(Component... components) {
+		registerComponents(Arrays.asList(components));
 	}
 
-	public void registerComponents(Collection<ComponentInfo> componentInfos) {
-		for (ComponentInfo componentInfo : componentInfos) {
+	public void registerComponents(Collection<Component> components) {
+		for (Component componentInfo : components) {
 			registerComponent(componentInfo);
 		}
 	}
 
-	public ComponentViewHolder createDeep(int order, Class<? extends Presenter> presenterClass, Presenter presenter, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
-		ComponentViewHolder holder = createView(order, presenterClass, presenter, root, actionHandler);
-		if (bind) holder.setData(presenter, force);
-		if (presenter instanceof ParentPresenterOld && holder instanceof ComponentGroup) {
-			ParentPresenterOld parentPresenterOld = (ParentPresenterOld) presenter;
+	public ComponentViewHolder createDeep(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
+		ComponentViewHolder holder = createView(order, presenterClass, componentInfo, root, actionHandler);
+		if (bind) holder.setData(componentInfo, force);
+		if (componentInfo instanceof ParentComponentInfoOld && holder instanceof ComponentGroup) {
+			ParentComponentInfoOld parentPresenterOld = (ParentComponentInfoOld) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			int childOrder = 0;
-			for (final Presenter component : parentPresenterOld) {
+			for (final ComponentInfo component : parentPresenterOld) {
 				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, contentGroup, force, true, actionHandler);
 				holder.addChild(deep);
 				contentGroup.addView(deep.itemView);
@@ -66,14 +76,18 @@ public class ComponentFactory {
 		return holder;
 	}
 
-	protected ComponentViewHolder createView(int order, Class<? extends Presenter> presenterClass, Presenter presenter, ViewGroup root, ActionHandler actionHandler) {
-		ComponentInfo it = getIt(presenterClass);
-		int layoutId = presenter.layoutHash();
-		int reuseId = presenter.deepLayoutHash();
-		if (it == null) throw new RuntimeException("Can't find data for " + presenterClass.getName());
+	protected ComponentViewHolder createView(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+		Component it = getIt(presenterClass);
+		int layoutId = componentInfo.layoutHash();
+		int reuseId = componentInfo.deepLayoutHash();
+		if (it == null) {
+			throw new RuntimeException("Can't find data for " + presenterClass.getName());
+		}
 		LayoutInflater inflater = LayoutInflater.from(root.getContext());
 		ViewDataBinding inflate = DataBindingUtil.inflate(inflater, it.layout, root, false);
-		if (inflate == null) throw new RuntimeException("Can't inflate view for " + presenterClass.getName());
+		if (inflate == null) {
+			throw new RuntimeException("Can't inflate view for " + presenterClass.getName());
+		}
 
 		ViewInformation viewInformation = new ViewInformation(order);
 
@@ -93,15 +107,15 @@ public class ComponentFactory {
 		return null;
 	}
 
-	public void bindDeep(ComponentViewHolder holder, Presenter presenter, boolean force) {
-		if (holder.getReuseId() != presenter.deepLayoutHash()) {
-			throw new RuntimeException(String.format("Presenter does not fit the layout, holder = %d, presenter = %d", holder.getLayoutId(), presenter.layoutHash()));
+	public void bindDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
+		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {
+			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
-		holder.setData(presenter, force);
-		if (presenter instanceof ParentPresenterOld && holder instanceof ComponentGroup) {
-			ParentPresenterOld parentPresenterOld = (ParentPresenterOld) presenter;
+		holder.setData(componentInfo, force);
+		if (componentInfo instanceof ParentComponentInfoOld && holder instanceof ComponentGroup) {
+			ParentComponentInfoOld parentPresenterOld = (ParentComponentInfoOld) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
-			if (holder.getLayoutId() == presenter.layoutHash()) {
+			if (holder.getLayoutId() == componentInfo.layoutHash()) {
 				List<ComponentViewHolder> children = holder.getChildren();
 				for (int i = 0; i < children.size(); i++) {
 					bindDeep(children.get(i), parentPresenterOld.get(i), force);
@@ -110,32 +124,20 @@ public class ComponentFactory {
 		}
 	}
 
-	protected ComponentInfo getIt(Class<? extends Presenter> presenterClass) {
-		ComponentInfo componentInfo = components.get(presenterClass);
+	protected Component getIt(Class<? extends ComponentInfo> presenterClass) {
+		Component componentInfo = components.get(presenterClass);
 		return componentInfo;
 	}
 
-	public <T extends ComponentViewHolder> T create(Presenter presenter, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, presenter.getClass(), presenter, root, false, true, actionHandler);
+	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+		return (T) createDeep(0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T createReusable(Presenter presenter, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, presenter.getClass(), presenter, root, false, false, actionHandler);
+	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+		return (T) createDeep(0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T createReusable(Class<? extends Presenter> presenterClass, ViewGroup root, ActionHandler actionHandler) {
+	public <T extends ComponentViewHolder> T createReusable(Class<? extends ComponentInfo> presenterClass, ViewGroup root, ActionHandler actionHandler) {
 		return (T) createDeep(0, presenterClass, null, root, false, false, actionHandler);
-	}
-
-	public static class ComponentInfo {
-		public Class<? extends ComponentViewHolder> viewHolder;
-		public int layout;
-		public Class<? extends Presenter> presenter;
-
-		public ComponentInfo(Class<? extends ComponentViewHolder> viewHolder, int layout, Class<? extends Presenter> presenter) {
-			this.layout = layout;
-			this.presenter = presenter;
-			this.viewHolder = viewHolder;
-		}
 	}
 }

@@ -1,10 +1,10 @@
 package nu.annat.beholder.presenter;
 
-public class AbstractPresenter implements Presenter {
-	private final PresenterDelegate delegate;
+public class AbstractComponentInfo implements ComponentInfo {
+	private final ComponentInfoDelegate delegate;
 
-	public AbstractPresenter() {
-		delegate = new PresenterDelegate(this);
+	public AbstractComponentInfo() {
+		delegate = new ComponentInfoDelegate(this);
 	}
 
 	@Override

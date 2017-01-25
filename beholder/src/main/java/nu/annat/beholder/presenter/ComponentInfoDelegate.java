@@ -1,10 +1,10 @@
 package nu.annat.beholder.presenter;
 
-public class PresenterDelegate implements Presenter {
+public class ComponentInfoDelegate implements ComponentInfo {
 
 	private final Object parent;
 
-	public PresenterDelegate(Object parent) {
+	public ComponentInfoDelegate(Object parent) {
 		this.parent = parent;
 	}
 

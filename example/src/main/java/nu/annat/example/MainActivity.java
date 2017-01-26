@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 
         // or register one, many or a collection through the registerComponent or registerComponents
         factory.registerComponents(
-            new Component(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class)
+            new Component(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class),
+            new Component(CardComponent.class, R.layout.card, CardData.class)
         );
 
         return factory;

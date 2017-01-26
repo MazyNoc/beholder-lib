@@ -2,6 +2,7 @@ package nu.annat.beholder.presenter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class ParentComponentInfoDelegate implements ParentComponentInfo {
@@ -31,6 +32,16 @@ public class ParentComponentInfoDelegate implements ParentComponentInfo {
 			add(componentInfo);
 		}
 		return true;
+	}
+
+	@Override
+	public ComponentInfo get(int index) {
+		return subComponentInfos.get(index);
+	}
+
+	@Override
+	public Iterator<ComponentInfo> iterator() {
+		return subComponentInfos.iterator();
 	}
 
 	@Override

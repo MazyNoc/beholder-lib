@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import nu.annat.beholder.presenter.ComponentInfo;
-import nu.annat.beholder.presenter.ParentComponentInfoOld;
+import nu.annat.beholder.presenter.ParentComponentInfo;
 
 public class ComponentFactory {
 
@@ -63,11 +63,11 @@ public class ComponentFactory {
 	public ComponentViewHolder createDeep(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
 		ComponentViewHolder holder = createView(order, presenterClass, componentInfo, root, actionHandler);
 		if (bind) holder.setData(componentInfo, force);
-		if (componentInfo instanceof ParentComponentInfoOld && holder instanceof ComponentGroup) {
-			ParentComponentInfoOld parentPresenterOld = (ParentComponentInfoOld) componentInfo;
+		if (componentInfo instanceof ParentComponentInfo && holder instanceof ComponentGroup) {
+			ParentComponentInfo parentComponentInfo = (ParentComponentInfo) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			int childOrder = 0;
-			for (final ComponentInfo component : parentPresenterOld) {
+			for (final ComponentInfo component : parentComponentInfo) {
 				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, contentGroup, force, true, actionHandler);
 				holder.addChild(deep);
 				contentGroup.addView(deep.itemView);
@@ -81,7 +81,7 @@ public class ComponentFactory {
 		int layoutId = componentInfo.layoutHash();
 		int reuseId = componentInfo.deepLayoutHash();
 		if (it == null) {
-			throw new RuntimeException("Can't find data for " + presenterClass.getName());
+			throw new RuntimeException(presenterClass.getName() + " is not registered as a component");
 		}
 		LayoutInflater inflater = LayoutInflater.from(root.getContext());
 		ViewDataBinding inflate = DataBindingUtil.inflate(inflater, it.layout, root, false);
@@ -112,8 +112,8 @@ public class ComponentFactory {
 			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
 		holder.setData(componentInfo, force);
-		if (componentInfo instanceof ParentComponentInfoOld && holder instanceof ComponentGroup) {
-			ParentComponentInfoOld parentPresenterOld = (ParentComponentInfoOld) componentInfo;
+		if (componentInfo instanceof ParentComponentInfo && holder instanceof ComponentGroup) {
+			ParentComponentInfo parentPresenterOld = (ParentComponentInfo) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			if (holder.getLayoutId() == componentInfo.layoutHash()) {
 				List<ComponentViewHolder> children = holder.getChildren();

@@ -30,6 +30,14 @@ public class Mockdata implements Runnable {
 		for (int i = 0; i < 5; i++) {
 			mock.add(new SingleLineData("row " + i));
 		}
+
+		for (int i = 0; i < 2; i++) {
+			mock.add(new CardData(
+				new DualLineData("inside a card", "With children"),
+				new SingleLineData("child 1"),
+				new SingleLineData("child 2")
+			));
+		}
 		Handler handler = new Handler(Looper.getMainLooper());
 		handler.post(new Runnable() {
 			@Override

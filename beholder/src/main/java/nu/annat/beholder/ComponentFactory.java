@@ -113,12 +113,14 @@ public class ComponentFactory {
 		}
 		holder.setData(componentInfo, force);
 		if (componentInfo instanceof ParentComponentInfo && holder instanceof ComponentGroup) {
-			ParentComponentInfo parentPresenterOld = (ParentComponentInfo) componentInfo;
+			ParentComponentInfo parentComponentInfo = (ParentComponentInfo) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			if (holder.getLayoutId() == componentInfo.layoutHash()) {
 				List<ComponentViewHolder> children = holder.getChildren();
-				for (int i = 0; i < children.size(); i++) {
-					bindDeep(children.get(i), parentPresenterOld.get(i), force);
+				if (children != null) {
+					for (int i = 0; i < children.size(); i++) {
+						bindDeep(children.get(i), parentComponentInfo.get(i), force);
+					}
 				}
 			}
 		}

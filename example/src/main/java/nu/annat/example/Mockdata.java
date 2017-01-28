@@ -26,16 +26,17 @@ public class Mockdata implements Runnable {
 		sleep(250);
 
 		final List<ComponentInfo> mock = new ArrayList<>();
-		mock.add(new DualLineData("This is a beholder test", "with some subtext"));
-		for (int i = 0; i < 5; i++) {
-			mock.add(new SingleLineData("row " + i));
-		}
+//		mock.add(new DualLineData("This is a beholder test", "with some subtext"));
+//		for (int i = 0; i < 5; i++) {
+//			mock.add(new SingleLineData("row " + i));
+//		}
 
 		for (int i = 0; i < 2; i++) {
 			mock.add(new CardData(
 				new DualLineData("inside a card", "With children"),
 				new SingleLineData("child 1"),
-				new SingleLineData("child 2")
+				new SingleLineData("child 2"),
+				new CardData(new DualLineData("inside a card", "With children"))
 			));
 		}
 		Handler handler = new Handler(Looper.getMainLooper());

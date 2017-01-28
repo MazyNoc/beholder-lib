@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 
     @Override
     public void provide(List<ComponentInfo> data) {
+        ComponentFactory.print(data);
         ComponentFactory factory = getFactory();
         binding.list.swapAdapter(new BeholderAdapter(factory, data, null), false);
     }

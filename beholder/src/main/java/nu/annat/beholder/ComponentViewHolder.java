@@ -14,9 +14,9 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 
 	protected final BINDING binding;
 	protected final ActionHandler actionHandler;
+	protected final ViewInformation viewInformation;
 	private final int layoutId;
 	private final int reuseId;
-	protected final ViewInformation viewInformation;
 	private PRESENTER PRESENTER;
 	private List<ComponentViewHolder> children;
 
@@ -82,8 +82,8 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	}
 
 	protected void act(final Action action) {
-		if(actionHandler!=null){
-			actionHandler.executeAction(action);
+		if (actionHandler != null) {
+			actionHandler.handle(action);
 		}
 	}
 

@@ -8,6 +8,10 @@
         <variable
             name="presenter"
             type="nu.annat.example.DualLineData"/>
+
+        <variable
+            name="handler"
+            type="nu.annat.example.DualLineComponent"/>
     </data>
 
     <LinearLayout
@@ -15,6 +19,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:minHeight="?attr/listPreferredItemHeight"
+        android:background="?selectableItemBackground"
+        android:onClick="@{handler::onCardClick}"
         android:orientation="vertical">
 
         <TextView

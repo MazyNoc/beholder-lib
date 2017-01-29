@@ -2,7 +2,6 @@ package nu.annat.beholder.presenter;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;

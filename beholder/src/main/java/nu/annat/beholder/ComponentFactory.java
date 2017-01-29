@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import nu.annat.beholder.presenter.ComponentInfo;
-import nu.annat.beholder.presenter.ParentComponentInfo;
+import nu.annat.beholder.presenter.ComponentInfoGroup;
 
 public class ComponentFactory {
 
@@ -63,11 +63,11 @@ public class ComponentFactory {
 	public ComponentViewHolder createDeep(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
 		ComponentViewHolder holder = createView(order, presenterClass, componentInfo, root, actionHandler);
 		if (bind) holder.setData(componentInfo, force);
-		if (componentInfo instanceof ParentComponentInfo && holder instanceof ComponentGroup) {
-			ParentComponentInfo parentComponentInfo = (ParentComponentInfo) componentInfo;
+		if (componentInfo instanceof ComponentInfoGroup && holder instanceof ComponentGroup) {
+			ComponentInfoGroup componentInfoGroup = (ComponentInfoGroup) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			int childOrder = 0;
-			for (final ComponentInfo component : parentComponentInfo) {
+			for (final ComponentInfo component : componentInfoGroup) {
 				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, contentGroup, force, true, actionHandler);
 				holder.addChild(deep);
 				contentGroup.addView(deep.itemView);
@@ -112,14 +112,14 @@ public class ComponentFactory {
 			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
 		holder.setData(componentInfo, force);
-		if (componentInfo instanceof ParentComponentInfo && holder instanceof ComponentGroup) {
-			ParentComponentInfo parentComponentInfo = (ParentComponentInfo) componentInfo;
+		if (componentInfo instanceof ComponentInfoGroup && holder instanceof ComponentGroup) {
+			ComponentInfoGroup componentInfoGroup = (ComponentInfoGroup) componentInfo;
 			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
 			if (holder.getLayoutId() == componentInfo.layoutHash()) {
 				List<ComponentViewHolder> children = holder.getChildren();
 				if (children != null) {
 					for (int i = 0; i < children.size(); i++) {
-						bindDeep(children.get(i), parentComponentInfo.get(i), force);
+						bindDeep(children.get(i), componentInfoGroup.get(i), force);
 					}
 				}
 			}
@@ -130,6 +130,27 @@ public class ComponentFactory {
 		Component componentInfo = components.get(presenterClass);
 		return componentInfo;
 	}
+
+	public static void print(List<ComponentInfo> componentInfoList) {
+		print(componentInfoList, 0);
+	}
+
+	private static void print(List<ComponentInfo> componentInfoList, int level) {
+		String s = "";
+		for (int i = 0; i < level; i++) {
+			s += "    ";
+		}
+
+		for (ComponentInfo componentInfo : componentInfoList) {
+			System.out.println(level + s + componentInfo.getClass().getSimpleName());
+			if (componentInfo instanceof ComponentInfoGroup) {
+				print((ComponentInfoGroup) componentInfo, level+1);
+			}
+
+		}
+	}
+
+
 
 	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
 		return (T) createDeep(0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);

@@ -5,27 +5,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class ExplodingComponentInfo extends AbstractParentComponentInfo {
+public class ExplodingComponentInfoGroup extends AbstractComponentInfoGroup {
 
 	protected final ArrayList<ComponentInfo> preparedItems = new ArrayList<>();
 
-	public ExplodingComponentInfo() {
+	public ExplodingComponentInfoGroup() {
 
 	}
 
-	public ExplodingComponentInfo(Collection<ComponentInfo> children) {
+	public ExplodingComponentInfoGroup(Collection<ComponentInfo> children) {
 		this();
 		super.addAll(children);
 	}
 
-	public ExplodingComponentInfo(ComponentInfo... children) {
+	public ExplodingComponentInfoGroup(ComponentInfo... children) {
 		this();
 		super.addAll(Arrays.asList(children));
 	}
 
 	public List<ComponentInfo> explode() {
 		preparedItems.clear();
-		prepare(subPresenters());
+		prepare(this);
 		return preparedItems;
 	}
 

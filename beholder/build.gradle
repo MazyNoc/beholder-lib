@@ -7,11 +7,14 @@ def bintrayKey = ""
 try {
     bintrayUser = project.property("bintray.user")
     bintrayKey = project.property("bintray.key")
+    println bintrayUser
+    println bintrayKey
+
 } catch (Exception ignore) {
     println "Missing release keystore passwords, add the keys \"bintray.user\" and \"bintray.key\" to your gradle.properties file"
 }
 
-def niceVersion = "0.1.2"
+def niceVersion = "0.1.3"
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"

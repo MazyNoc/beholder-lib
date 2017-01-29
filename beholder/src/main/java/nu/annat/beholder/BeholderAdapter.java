@@ -12,13 +12,13 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 	private static final String TAG = BeholderAdapter.class.getSimpleName();
 
 	private final ActionHandler actionHandler;
-	private final List<ComponentInfo> items;
+	private final List<ComponentInfo> data;
 	private ComponentFactory factory;
 	private SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
-	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> items, ActionHandler actionHandler) {
+	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler) {
 		this.factory = factory;
-		this.items = items;
+		this.data = data;
 		this.actionHandler = actionHandler;
 	}
 
@@ -29,20 +29,24 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 
 	@Override
 	public int getItemViewType(int position) {
-		ComponentInfo componentInfo = items.get(position);
+		ComponentInfo componentInfo = data.get(position);
 		int deepLayoutHash = componentInfo.deepLayoutHash();
 		cachedPresenters.put(deepLayoutHash, componentInfo);
 		return deepLayoutHash;
 	}
 
+	public List<ComponentInfo> getData() {
+		return data;
+	}
+
 	@Override
 	public void onBindViewHolder(ComponentViewHolder holder, int position) {
-		factory.bindDeep(holder, items.get(position), true);
+		factory.bindDeep(holder, data.get(position), true);
 	}
 
 	@Override
 	public int getItemCount() {
-		return items == null ? 0 : items.size();
+		return data == null ? 0 : data.size();
 	}
 
 	public void close() {

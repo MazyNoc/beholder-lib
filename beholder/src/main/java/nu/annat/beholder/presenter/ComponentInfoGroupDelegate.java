@@ -41,15 +41,10 @@ public class ComponentInfoGroupDelegate extends ArrayList<ComponentInfo> impleme
 
 	@Override
 	public int deepLayoutHash() {
-		//if (lastModCount != modCount) {
 		int hash = layoutHash();
 		for (ComponentInfo childComponentInfo : this) {
 			hash = 31 * hash + childComponentInfo.deepLayoutHash();
 		}
-//			lastModCount = modCount;
-//			lastDeepHash = hash;
-//		}
-//		return lastDeepHash;
 		return hash;
 	}
 }

@@ -18,7 +18,6 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	private final int layoutId;
 	private final int reuseId;
 	private PRESENTER PRESENTER;
-	private List<ComponentViewHolder> children;
 
 	// debug constructor
 	private ComponentViewHolder(View view) {
@@ -64,24 +63,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		return reuseId;
 	}
 
-	private void ensureChildren() {
-		children = children != null ? children : new ArrayList<ComponentViewHolder>();
-	}
-
-	public void addChild(ComponentViewHolder viewHolder) {
-		ensureChildren();
-		children.add(viewHolder);
-	}
-
-	public List<ComponentViewHolder> getChildren() {
-		if (BuildConfig.DEBUG) {
-			return Collections.unmodifiableList(children);
-		} else {
-			return children;
-		}
-	}
-
-	protected void act(final Action action) {
+	protected void act(final Object action) {
 		if (actionHandler != null) {
 			actionHandler.handle(action);
 		}

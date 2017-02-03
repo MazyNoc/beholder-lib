@@ -8,12 +8,27 @@ import java.util.List;
 
 import nu.annat.beholder.presenter.ComponentInfo;
 
-public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends ComponentViewHolder<BINDING, PRESENTER> {
+public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends ComponentViewHolder<BINDING, PRESENTER> implements ComponentGroup {
 
-	private List<ComponentViewHolder> children = new ArrayList<>();
+	protected List<ComponentViewHolder> children = new ArrayList<>();
 
 	public ComponentGroupViewHolder(ViewInformation viewInformation, ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
 		super(viewInformation, binding, actionHandler, layoutId, reuseId);
+	}
+
+	public void addChild(ComponentViewHolder componentViewHolder) {
+		children.add(componentViewHolder);
+		getChildArea().addView(componentViewHolder.itemView);
+		onChildAdded(componentViewHolder);
+	}
+
+	protected void onChildAdded(ComponentViewHolder componentViewHolder){
+		// not used here
+	}
+
+	public void removeAll() {
+		getChildArea().removeAllViews();
+		children.clear();
 	}
 
 	public List<ComponentViewHolder> getChildren() {

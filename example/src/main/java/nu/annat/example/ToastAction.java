@@ -1,9 +1,7 @@
 package nu.annat.example;
 
-import nu.annat.beholder.Action;
 
-
-public class ToastAction extends Action {
+public class ToastAction {
 	final String message;
 
 	public ToastAction(String message) {

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 		ActionHandler actionHandler = new ActionHandler();
 		actionHandler.register(ToastAction.class, new OnAction<ToastAction>() {
 			@Override
-			public void executeAction(ToastAction action) {
+			public void execute(ToastAction action) {
 				Toast.makeText(MainActivity.this, action.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		});

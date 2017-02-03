@@ -65,12 +65,12 @@ public class ComponentFactory {
 		if (bind) holder.setData(componentInfo, force);
 		if (componentInfo instanceof ComponentInfoGroup && holder instanceof ComponentGroup) {
 			ComponentInfoGroup componentInfoGroup = (ComponentInfoGroup) componentInfo;
-			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
+			ComponentGroup componentGroup = (ComponentGroup) holder;
 			int childOrder = 0;
 			for (final ComponentInfo component : componentInfoGroup) {
-				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, contentGroup, force, true, actionHandler);
-				holder.addChild(deep);
-				contentGroup.addView(deep.itemView);
+				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, true, actionHandler);
+				componentGroup.addChild(deep);
+				//contentGroup.addView(deep.itemView);
 			}
 		}
 		return holder;
@@ -111,12 +111,13 @@ public class ComponentFactory {
 		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {
 			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
+
 		holder.setData(componentInfo, force);
 		if (componentInfo instanceof ComponentInfoGroup && holder instanceof ComponentGroup) {
 			ComponentInfoGroup componentInfoGroup = (ComponentInfoGroup) componentInfo;
-			ViewGroup contentGroup = ((ComponentGroup) holder).getChildArea();
+			ComponentGroup componentGroup = (ComponentGroup) holder;
 			if (holder.getLayoutId() == componentInfo.layoutHash()) {
-				List<ComponentViewHolder> children = holder.getChildren();
+				List<ComponentViewHolder> children = componentGroup.getChildren();
 				if (children != null) {
 					for (int i = 0; i < children.size(); i++) {
 						bindDeep(children.get(i), componentInfoGroup.get(i), force);
@@ -127,8 +128,7 @@ public class ComponentFactory {
 	}
 
 	protected Component getIt(Class<? extends ComponentInfo> presenterClass) {
-		Component componentInfo = components.get(presenterClass);
-		return componentInfo;
+		return components.get(presenterClass);
 	}
 
 	public static void print(List<ComponentInfo> componentInfoList) {

@@ -2,8 +2,7 @@ package nu.annat.example;
 
 import android.databinding.ViewDataBinding;
 
-import nu.annat.beholder.ActionHandler;
-import nu.annat.beholder.OnAction;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.ComponentViewHolder;
 import nu.annat.beholder.ViewInformation;
 import nu.annat.example.databinding.SingleLineLayoutBinding;

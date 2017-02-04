@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {

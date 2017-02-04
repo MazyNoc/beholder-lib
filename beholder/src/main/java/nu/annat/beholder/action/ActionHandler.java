@@ -1,4 +1,4 @@
-package nu.annat.beholder;
+package nu.annat.beholder.action;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -37,9 +37,9 @@ public class ActionHandler {
 	public void handle(final Object action) {
 		final ActionInfo actionInfo = handlers.get(action.getClass());
 		if (actionInfo == null) {
-			Log.d(TAG, "Action " + action.getClass().getName() + " is not registered");
+			Log.w(TAG, "Action " + action.getClass().getName() + " is not registered");
 		} else {
-			if (actionInfo.forceMainThread && !onMainThread()) {
+			if (actionInfo.forceMainThread && !isOnMainThread()) {
 				mainThreadHandler.post(new Runnable() {
 					@Override
 					public void run() {
@@ -52,7 +52,7 @@ public class ActionHandler {
 		}
 	}
 
-	private boolean onMainThread() {
+	private boolean isOnMainThread() {
 		return Thread.currentThread() == Looper.getMainLooper().getThread();
 	}
 }

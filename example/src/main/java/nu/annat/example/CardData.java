@@ -2,11 +2,10 @@ package nu.annat.example;
 
 import java.util.Arrays;
 
-import nu.annat.beholder.presenter.AbstractComponentInfoGroup;
-import nu.annat.beholder.presenter.ComponentInfo;
+import nu.annat.beholder.presenter.ComponentPresenter;
 
-public class CardData extends AbstractComponentInfoGroup {
-	public CardData(ComponentInfo... info) {
+public class CardData extends ComponentPresenter {
+	public CardData(ComponentPresenter... info) {
 		addAll(Arrays.asList(info));
 	}
 }

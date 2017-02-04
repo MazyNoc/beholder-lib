@@ -1,8 +1,8 @@
 package nu.annat.example;
 
 
-import nu.annat.beholder.presenter.AbstractComponentInfo;
+import nu.annat.beholder.presenter.ComponentPresenter;
 
-public class BaseData extends AbstractComponentInfo {
+public class BaseData extends ComponentPresenter {
 
 }

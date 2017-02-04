@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends ComponentViewHolder<BINDING, PRESENTER> implements ComponentGroup {

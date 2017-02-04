@@ -4,10 +4,7 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends RecyclerView.ViewHolder {

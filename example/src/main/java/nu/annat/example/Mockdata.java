@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.annat.beholder.presenter.ComponentInfo;
+import nu.annat.beholder.presenter.ComponentPresenter;
 
 public class Mockdata implements Runnable {
 	private final Callback callback;
@@ -39,6 +40,11 @@ public class Mockdata implements Runnable {
 				new CardData(new DualLineData("inside a card", "With children"))
 			));
 		}
+
+		CardWrapper componentInfos = new CardWrapper();
+		componentInfos.add(new SingleLineData("item"));
+		mock.addAll(componentInfos.get());
+
 		Handler handler = new Handler(Looper.getMainLooper());
 		handler.post(new Runnable() {
 			@Override

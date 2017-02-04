@@ -8,11 +8,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import nu.annat.beholder.ActionHandler;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.BeholderAdapter;
 import nu.annat.beholder.ComponentFactory;
 import nu.annat.beholder.ComponentFactory.Component;
-import nu.annat.beholder.OnAction;
+import nu.annat.beholder.action.OnAction;
 import nu.annat.beholder.presenter.ComponentInfo;
 import nu.annat.example.databinding.ActivityMainBinding;
 

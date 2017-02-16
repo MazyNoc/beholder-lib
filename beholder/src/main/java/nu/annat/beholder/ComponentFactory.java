@@ -46,7 +46,7 @@ public class ComponentFactory {
 		for (ComponentInfo componentInfo : ComponentInfoList) {
 			System.out.println(level + s + componentInfo.getClass().getSimpleName());
 			if (componentInfo instanceof ComponentInfo) {
-				print(componentInfo, level + 1);
+				print(componentInfo.getChildren(), level + 1);
 			}
 
 		}
@@ -82,10 +82,10 @@ public class ComponentFactory {
 	public ComponentViewHolder createDeep(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
 		ComponentViewHolder holder = createView(order, presenterClass, componentInfo, root, actionHandler);
 		if (bind) holder.setData(componentInfo, force);
-		if (!componentInfo.isEmpty() && holder instanceof ComponentGroup) {
+		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
 			int childOrder = 0;
-			for (final ComponentInfo component : componentInfo) {
+			for (final ComponentInfo component : componentInfo.getChildren()) {
 				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, true, actionHandler);
 				componentGroup.addChild(deep);
 			}
@@ -134,9 +134,10 @@ public class ComponentFactory {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
 			if (holder.getLayoutId() == componentInfo.layoutHash()) {
 				List<ComponentViewHolder> children = componentGroup.getChildren();
+				List<ComponentInfo> componentInfoList = componentInfo.getChildren();
 				if (children != null) {
 					for (int i = 0; i < children.size(); i++) {
-						bindDeep(children.get(i), componentInfo.get(i), force);
+						bindDeep(children.get(i), componentInfoList.get(i), force);
 					}
 				}
 			}

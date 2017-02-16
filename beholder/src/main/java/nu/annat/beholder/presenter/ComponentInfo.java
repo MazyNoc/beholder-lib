@@ -1,5 +1,7 @@
 package nu.annat.beholder.presenter;
 
+import android.widget.LinearLayout;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +12,10 @@ import java.util.List;
  * Since the list of children can change during the components lifetime, the calls cant be static.
  *
  */
-public interface ComponentInfo extends List<ComponentInfo> {
+public interface ComponentInfo  {
+
+	List<ComponentInfo> getChildren();
+
 	/**
 	 * @return hash for current layout
 	 */

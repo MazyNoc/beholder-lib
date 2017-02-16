@@ -1,7 +1,11 @@
 package nu.annat.beholder.presenter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import nu.annat.beholder.ComponentFactory;
 
 /**
  * Even if most presenters don't have children, the Android implementation of an empty
@@ -44,5 +48,30 @@ public class ComponentPresenter implements ComponentInfo {
 
 	public List<ComponentInfo> getChildren() {
 		return children;
+	}
+
+	@Override
+	public void add(ComponentInfo component) {
+		children.add(component);
+	}
+
+	@Override
+	public void addAll(Collection<ComponentInfo> components) {
+		children.addAll(components);
+	}
+
+	@Override
+	public ComponentInfo get(int index) {
+		return children.get(index);
+	}
+
+	@Override
+	public int size() {
+		return children.size();
+	}
+
+	@Override
+	public Iterator<ComponentInfo> iterator() {
+		return children.iterator();
 	}
 }

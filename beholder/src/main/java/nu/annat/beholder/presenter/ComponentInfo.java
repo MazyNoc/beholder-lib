@@ -1,5 +1,7 @@
 package nu.annat.beholder.presenter;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,9 +11,7 @@ import java.util.List;
  * Since the list of children can change during the components lifetime, the calls cant be static.
  *
  */
-public interface ComponentInfo  {
-
-	List<ComponentInfo> getChildren();
+public interface ComponentInfo extends Iterable<ComponentInfo> {
 
 	/**
 	 * @return hash for current layout
@@ -22,4 +22,16 @@ public interface ComponentInfo  {
 	 * @return hash for the total deep layout
 	 */
 	int deepLayoutHash();
+
+	List<ComponentInfo> getChildren();
+
+	void add(ComponentInfo component);
+
+	void addAll(Collection<ComponentInfo> components);
+
+	ComponentInfo get(int index);
+
+	int size();
+
+	Iterator<ComponentInfo> iterator();
 }

@@ -1,6 +1,8 @@
 package nu.annat.example;
 
-public class SingleLineData extends BaseData {
+import nu.annat.beholder.presenter.ComponentPresenter;
+
+public class SingleLineData extends ComponentPresenter {
 	private String text;
 
 	public SingleLineData(String text) {

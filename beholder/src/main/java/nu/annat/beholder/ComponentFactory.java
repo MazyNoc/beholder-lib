@@ -26,7 +26,7 @@ public class ComponentFactory {
 		public int layout;
 		public Class<? extends ComponentInfo> presenter;
 
-		public Component(Class<? extends ComponentViewHolder> viewHolder, int layout, Class<? extends ComponentInfo> presenter) {
+		public Component(Class<? extends ComponentInfo> presenter, Class<? extends ComponentViewHolder> viewHolder, int layout) {
 			this.layout = layout;
 			this.presenter = presenter;
 			this.viewHolder = viewHolder;

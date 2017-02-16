@@ -48,17 +48,16 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 	}
 
 	private ComponentFactory getFactory() {
-		// you can either
-		// er send one, many or a collection in the constructor
+		// you can either send one, many or a collection in the constructor
 
 		ComponentFactory factory = new ComponentFactory(
-			new Component(SingleLineComponent.class, R.layout.single_line_layout, SingleLineData.class)
+			new Component(SingleLineData.class, SingleLineComponent.class, R.layout.single_line_layout)
 		);
 
 		// or register one, many or a collection through the registerComponent or registerComponents
 		factory.registerComponents(
-			new Component(DualLineComponent.class, R.layout.dual_line_layout, DualLineData.class),
-			new Component(CardComponent.class, R.layout.card, CardData.class)
+			new Component(DualLineData.class, DualLineComponent.class, R.layout.dual_line_layout),
+			new Component(CardData.class, CardComponent.class, R.layout.card)
 		);
 
 		return factory;

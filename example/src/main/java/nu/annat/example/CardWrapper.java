@@ -13,7 +13,6 @@ public class CardWrapper extends ArrayList<ComponentPresenter> {
 		return super.size()+2;
 	}
 
-//	@Override
 	public Collection<ComponentPresenter> get() {
 		ArrayList<ComponentPresenter> list = new ArrayList<>();
 		list.add(new CardData());

@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+
 def bintrayUser = ""
 def bintrayKey = ""
 try {
@@ -119,3 +120,19 @@ bintray {
         publish = true
     }
 }
+
+import org.ajoberstar.gradle.git.tasks.GitTag
+import org.ajoberstar.gradle.git.tasks.GitPush
+
+
+task createTag(type: GitTag) {
+    repoPath = rootDir
+    tagName = niceVersion
+    message = "Application release ${project.version.toString()}"
+}
+
+task pushTag(type: GitPush, dependsOn: createTag) {
+    namesOrSpecs = [niceVersion]
+}
+
+bintrayUpload.dependsOn pushTag

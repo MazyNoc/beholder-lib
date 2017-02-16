@@ -2,9 +2,7 @@ package nu.annat.example;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import nu.annat.beholder.presenter.ComponentInfo;
 import nu.annat.beholder.presenter.ComponentPresenter;
 
 

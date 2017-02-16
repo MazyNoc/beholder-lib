@@ -36,6 +36,10 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		prepareBinding(this.binding);
 	}
 
+	/**
+	 * Called once when the view is created. use it to bind view specific things like action callbacks and @link {@link ViewInformation}
+	 * @param binding
+	 */
 	protected abstract void prepareBinding(final BINDING binding);
 
 	public PRESENTER getPresenter() {

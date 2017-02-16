@@ -1,8 +1,5 @@
 package nu.annat.beholder.presenter;
 
-import android.widget.LinearLayout;
-
-import java.util.Iterator;
 import java.util.List;
 
 /**

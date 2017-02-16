@@ -3,9 +3,9 @@ package nu.annat.example;
 import android.databinding.ViewDataBinding;
 import android.view.ViewGroup;
 
-import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.ComponentGroupViewHolder;
 import nu.annat.beholder.ViewInformation;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.CardBinding;
 
 public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardData> {
@@ -16,7 +16,7 @@ public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardDat
 
 	@Override
 	protected void prepareBinding(CardBinding binding) {
-
+		binding.setViewInfo(viewInformation);
 	}
 
 	@Override

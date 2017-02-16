@@ -79,21 +79,22 @@ public class ComponentFactory {
 		}
 	}
 
-	public ComponentViewHolder createDeep(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
-		ComponentViewHolder holder = createView(order, presenterClass, componentInfo, root, actionHandler);
+	public ComponentViewHolder createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
+		ComponentViewHolder holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
 		if (bind) holder.setData(componentInfo, force);
 		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
 			int childOrder = 0;
+			depth++;
 			for (final ComponentInfo component : componentInfo.getChildren()) {
-				ComponentViewHolder deep = createDeep(childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, true, actionHandler);
+				ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, true, actionHandler);
 				componentGroup.addChild(deep);
 			}
 		}
 		return holder;
 	}
 
-	protected ComponentViewHolder createView(int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+	protected ComponentViewHolder createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
 		Component it = getIt(presenterClass);
 		int layoutId = componentInfo.layoutHash();
 		int reuseId = componentInfo.deepLayoutHash();
@@ -106,7 +107,7 @@ public class ComponentFactory {
 			throw new RuntimeException("Can't inflate view for " + presenterClass.getName());
 		}
 
-		ViewInformation viewInformation = new ViewInformation(order);
+		ViewInformation viewInformation = new ViewInformation(depth, order);
 
 		// until java 8, reflection
 		try {
@@ -149,14 +150,14 @@ public class ComponentFactory {
 	}
 
 	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
+		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
 	}
 
 	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
+		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
 	}
 
 	public <T extends ComponentViewHolder> T createReusable(Class<? extends ComponentInfo> presenterClass, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, presenterClass, null, root, false, false, actionHandler);
+		return (T) createDeep(0, 0, presenterClass, null, root, false, false, actionHandler);
 	}
 }

@@ -26,6 +26,6 @@ public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding
 	}
 
 	public void onCardClick(View view){
-		actionHandler.handle(new ToastAction("Message"));
+		actionHandler.handle(new ToastAction(getPresenter().getHeader()));
 	}
 }

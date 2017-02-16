@@ -9,6 +9,12 @@ import java.util.List;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
+/**
+ * Helper to use components directly as RecycleView item objects.
+ *
+ *
+ *
+ */
 public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 	private static final String TAG = BeholderAdapter.class.getSimpleName();
 

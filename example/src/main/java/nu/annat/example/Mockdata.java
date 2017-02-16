@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nu.annat.beholder.presenter.ComponentInfo;
-import nu.annat.beholder.presenter.ComponentPresenter;
 
 public class Mockdata implements Runnable {
 	private final Callback callback;

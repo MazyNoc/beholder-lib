@@ -17,7 +17,12 @@ public class ComponentPresenter implements ComponentInfo {
 		this.base = this;
 	}
 
+	/**
+	 * Convenience constructor when its used as a delegate class (see {@link ObservablePresenter}
+	 * @param impersonate, the instance that uses this as a delegate class. Is used for the hash-code calculations
+	 */
 	public ComponentPresenter(ComponentInfo impersonate) {
+		super();
 		this.base = impersonate;
 	}
 

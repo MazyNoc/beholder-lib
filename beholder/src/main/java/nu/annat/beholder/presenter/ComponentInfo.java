@@ -22,7 +22,7 @@ public interface ComponentInfo  {
 	int layoutHash();
 
 	/**
-	 * @return hash for the total layout
+	 * @return hash for the total deep layout
 	 */
 	int deepLayoutHash();
 }

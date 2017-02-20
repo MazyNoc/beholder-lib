@@ -37,10 +37,6 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		prepareView();
 	}
 
-	/**
-	 * Called once when the view is created. use it to bind view specific things like action callbacks and @link {@link ViewInformation}
-	 */
-	protected abstract void prepareView();
 
 	public PRESENTER getPresenter() {
 		return presenter;
@@ -54,7 +50,21 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		}
 	}
 
-	protected abstract void prepareData();
+	/**
+	 * Called once when the view is created. use it to bind view specific things like action callbacks and @link {@link ViewInformation}
+	 */
+	protected void prepareView() {
+	}
+
+	;
+
+	/**
+	 * Called every time the data is set. use it to bind data from the presenter to the view
+	 */
+	protected void prepareData() {
+	}
+
+	;
 
 	public int getLayoutId() {
 		return layoutId;

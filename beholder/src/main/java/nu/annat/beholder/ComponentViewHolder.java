@@ -14,7 +14,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	protected final ViewInformation viewInformation;
 	private final int layoutId;
 	private final int reuseId;
-	private PRESENTER PRESENTER;
+	protected PRESENTER PRESENTER;
 
 	// debug constructor
 	private ComponentViewHolder(View view) {
@@ -31,6 +31,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		this.layoutId = layoutId;
 		this.actionHandler = actionHandler;
 		this.reuseId = reuseId;
+		//noinspection unchecked
 		this.binding = (BINDING) binding;
 		this.viewInformation = viewInformation;
 		prepareBinding(this.binding);

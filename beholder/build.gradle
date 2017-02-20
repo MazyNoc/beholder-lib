@@ -15,7 +15,7 @@ try {
     println "Missing release keystore passwords, add the keys \"bintray.user\" and \"bintray.key\" to your gradle.properties file"
 }
 
-def niceVersion = "0.3.4"
+def niceVersion = "0.3.5"
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -121,9 +121,9 @@ bintray {
     }
 }
 
-import org.ajoberstar.gradle.git.tasks.GitTag
-import org.ajoberstar.gradle.git.tasks.GitPush
 
+import org.ajoberstar.gradle.git.tasks.GitPush
+import org.ajoberstar.gradle.git.tasks.GitTag
 
 task createTag(type: GitTag) {
     repoPath = rootDir

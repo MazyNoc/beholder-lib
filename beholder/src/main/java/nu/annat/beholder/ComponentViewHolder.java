@@ -34,28 +34,27 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		//noinspection unchecked
 		this.binding = (BINDING) binding;
 		this.viewInformation = viewInformation;
-		prepareBinding(this.binding);
+		prepareView();
 	}
 
 	/**
 	 * Called once when the view is created. use it to bind view specific things like action callbacks and @link {@link ViewInformation}
-	 * @param binding
 	 */
-	protected abstract void prepareBinding(final BINDING binding);
+	protected abstract void prepareView();
 
 	public PRESENTER getPresenter() {
 		return presenter;
 	}
 
-	public void setData(PRESENTER PRESENTER, boolean force) {
-		this.presenter = PRESENTER;
-		updateBindings(binding, PRESENTER);
+	public void setData(PRESENTER presenter, boolean force) {
+		this.presenter = presenter;
+		prepareData();
 		if (force) {
 			binding.executePendingBindings();
 		}
 	}
 
-	protected abstract void updateBindings(BINDING binding, final PRESENTER presenter);
+	protected abstract void prepareData();
 
 	public int getLayoutId() {
 		return layoutId;

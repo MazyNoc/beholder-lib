@@ -3,9 +3,9 @@ package nu.annat.example;
 import android.databinding.ViewDataBinding;
 import android.view.View;
 
-import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.ComponentViewHolder;
 import nu.annat.beholder.ViewInformation;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.DualLineLayoutBinding;
 
 public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding, DualLineData> {
@@ -16,12 +16,12 @@ public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding
 	}
 
 	@Override
-	protected void prepareBinding(DualLineLayoutBinding binding) {
+	protected void prepareView(DualLineLayoutBinding binding) {
 		binding.setHandler(this);
 	}
 
 	@Override
-	protected void updateBindings(DualLineLayoutBinding binding, DualLineData presenter) {
+	protected void prepareData(DualLineLayoutBinding binding, DualLineData presenter) {
 		binding.setPresenter(presenter);
 	}
 

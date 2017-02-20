@@ -2,9 +2,9 @@ package nu.annat.example;
 
 import android.databinding.ViewDataBinding;
 
-import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.ComponentViewHolder;
 import nu.annat.beholder.ViewInformation;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.SingleLineLayoutBinding;
 
 public class SingleLineComponent extends ComponentViewHolder<SingleLineLayoutBinding, SingleLineData> {
@@ -14,12 +14,12 @@ public class SingleLineComponent extends ComponentViewHolder<SingleLineLayoutBin
 	}
 
 	@Override
-	protected void prepareBinding(SingleLineLayoutBinding binding) {
+	protected void prepareView(SingleLineLayoutBinding binding) {
 
 	}
 
 	@Override
-	protected void updateBindings(SingleLineLayoutBinding binding, SingleLineData presenter) {
+	protected void prepareData(SingleLineLayoutBinding binding, SingleLineData presenter) {
 		binding.setPresenter(presenter);
 	}
 }

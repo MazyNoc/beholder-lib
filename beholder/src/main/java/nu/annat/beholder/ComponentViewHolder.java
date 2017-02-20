@@ -14,7 +14,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	protected final ViewInformation viewInformation;
 	private final int layoutId;
 	private final int reuseId;
-	protected PRESENTER PRESENTER;
+	protected PRESENTER presenter;
 
 	// debug constructor
 	private ComponentViewHolder(View view) {
@@ -44,11 +44,11 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	protected abstract void prepareBinding(final BINDING binding);
 
 	public PRESENTER getPresenter() {
-		return PRESENTER;
+		return presenter;
 	}
 
 	public void setData(PRESENTER PRESENTER, boolean force) {
-		this.PRESENTER = PRESENTER;
+		this.presenter = PRESENTER;
 		updateBindings(binding, PRESENTER);
 		if (force) {
 			binding.executePendingBindings();

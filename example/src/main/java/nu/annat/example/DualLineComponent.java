@@ -8,6 +8,7 @@ import nu.annat.beholder.ViewInformation;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.DualLineLayoutBinding;
 
+
 public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding, DualLineData> {
 
 
@@ -16,16 +17,16 @@ public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding
 	}
 
 	@Override
-	protected void prepareView(DualLineLayoutBinding binding) {
+	protected void prepareView() {
 		binding.setHandler(this);
 	}
 
 	@Override
-	protected void prepareData(DualLineLayoutBinding binding, DualLineData presenter) {
+	protected void prepareData() {
 		binding.setPresenter(presenter);
 	}
 
-	public void onCardClick(View view){
-		actionHandler.handle(new ToastAction(getPresenter().getHeader()));
+	public void onCardClick(View view) {
+		act(new ToastAction(getPresenter().getHeader()));
 	}
 }

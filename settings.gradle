@@ -1,1 +1,1 @@
-include ':beholder', ':example'
+include ':beholder', ':example', ':jsonconverter'

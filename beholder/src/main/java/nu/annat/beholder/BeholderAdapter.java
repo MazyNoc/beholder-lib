@@ -36,10 +36,14 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 
 	@Override
 	public int getItemViewType(int position) {
-		ComponentInfo componentInfo = data.get(position);
+		ComponentInfo componentInfo = getItem(position);
 		int deepLayoutHash = componentInfo.deepLayoutHash();
 		cachedPresenters.put(deepLayoutHash, componentInfo);
 		return deepLayoutHash;
+	}
+
+	protected ComponentInfo getItem(int position) {
+		return data.get(position);
 	}
 
 	public List<ComponentInfo> getData() {
@@ -48,7 +52,7 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 
 	@Override
 	public void onBindViewHolder(ComponentViewHolder holder, int position) {
-		factory.bindDeep(holder, data.get(position), true);
+		factory.bindDeep(holder, getItem(position), true);
 	}
 
 	@Override

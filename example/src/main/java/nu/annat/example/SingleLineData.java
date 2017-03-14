@@ -6,6 +6,7 @@ public class SingleLineData extends ComponentPresenter {
 	private String text;
 
 	public SingleLineData(String text) {
+		super();
 		this.text = text;
 	}
 

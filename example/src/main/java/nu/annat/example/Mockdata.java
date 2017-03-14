@@ -23,27 +23,23 @@ public class Mockdata implements Runnable {
 
 	@Override
 	public void run() {
-		sleep(250);
+		sleep(250); // simulate network call.
 
 		final List<ComponentInfo> mock = new ArrayList<>();
-//		mock.add(new DualLineData("This is a beholder test", "with some subtext"));
-//		for (int i = 0; i < 5; i++) {
-//			mock.add(new SingleLineData("row " + i));
-//		}
+		if (false) {
+			for (int i = 0; i < 2; i++) {
+				mock.add(new CardData(
+					new DualLineData("inside a card", "With children"),
+					new SingleLineData("child 1"),
+					new SingleLineData("child 2"),
+					new CardData(new DualLineData("card wrapped in a card", "With children"))
+				));
+			}
 
-		for (int i = 0; i < 2; i++) {
-			mock.add(new CardData(
-				new DualLineData("inside a card", "With children"),
-				new SingleLineData("child 1"),
-				new SingleLineData("child 2"),
-				new CardData(new DualLineData("inside a card", "With children"))
-			));
+			CardWrapper componentInfos = new CardWrapper();
+			componentInfos.add(new SingleLineData("item"));
+			mock.addAll(componentInfos.get());
 		}
-
-		CardWrapper componentInfos = new CardWrapper();
-		componentInfos.add(new SingleLineData("item"));
-		mock.addAll(componentInfos.get());
-
 		Handler handler = new Handler(Looper.getMainLooper());
 		handler.post(new Runnable() {
 			@Override

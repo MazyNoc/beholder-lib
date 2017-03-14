@@ -15,13 +15,8 @@ public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardDat
 	}
 
 	@Override
-	protected void prepareView(CardBinding binding) {
+	protected void prepareView() {
 		binding.setViewInfo(viewInformation);
-	}
-
-	@Override
-	protected void prepareData(CardBinding binding, CardData cardData) {
-
 	}
 
 	@Override

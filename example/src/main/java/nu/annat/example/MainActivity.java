@@ -8,11 +8,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.BeholderAdapter;
 import nu.annat.beholder.ComponentFactory;
 import nu.annat.beholder.ComponentFactory.Component;
+import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.action.OnAction;
+import nu.annat.beholder.jsonconverter.Converter;
 import nu.annat.beholder.presenter.ComponentInfo;
 import nu.annat.example.databinding.ActivityMainBinding;
 
@@ -32,8 +33,16 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 	@Override
 	public void provide(List<ComponentInfo> data) {
 		ComponentFactory factory = getFactory();
+		Converter converter = new Converter(factory);
+
+		String json = "[{" +
+			"'component':'DualLineData'," +
+			"'data':{" +
+			"'header':'weff'}}]";
+		List<ComponentInfo> arr = converter.convert(json);
+
 		ActionHandler handler = getActionHandler();
-		binding.list.swapAdapter(new BeholderAdapter(factory, data, handler), false);
+		binding.list.swapAdapter(new BeholderAdapter(factory, arr, handler), false);
 	}
 
 	private ActionHandler getActionHandler() {

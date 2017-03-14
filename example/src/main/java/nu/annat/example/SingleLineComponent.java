@@ -14,12 +14,7 @@ public class SingleLineComponent extends ComponentViewHolder<SingleLineLayoutBin
 	}
 
 	@Override
-	protected void prepareView(SingleLineLayoutBinding binding) {
-
-	}
-
-	@Override
-	protected void prepareData(SingleLineLayoutBinding binding, SingleLineData presenter) {
+	protected void prepareData() {
 		binding.setPresenter(presenter);
 	}
 }

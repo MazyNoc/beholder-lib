@@ -34,7 +34,7 @@ import org.ajoberstar.gradle.git.tasks.GitPush
 import org.ajoberstar.gradle.git.tasks.GitTag
 
 ext {
-    niceVersion = "0.4.2"
+    niceVersion = "0.4.3"
 }
 
 task createTag(type: GitTag) {

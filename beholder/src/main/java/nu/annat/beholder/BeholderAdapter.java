@@ -18,10 +18,10 @@ import nu.annat.beholder.presenter.ComponentInfo;
 public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 	private static final String TAG = BeholderAdapter.class.getSimpleName();
 
-	private final ActionHandler actionHandler;
-	private final List<ComponentInfo> data;
-	private ComponentFactory factory;
-	private SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
+	protected final ActionHandler actionHandler;
+	protected final List<ComponentInfo> data;
+	protected ComponentFactory factory;
+	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
 	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler) {
 		this.factory = factory;

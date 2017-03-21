@@ -125,6 +125,12 @@ public class ComponentFactory {
 		return null;
 	}
 
+	public void updateDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force, ActionHandler actionHandler) {
+		ViewGroup vg = ((ViewGroup) holder.itemView);
+		vg.removeAllViews();
+		createDeep(0, 0, componentInfo.getClass(), componentInfo, vg, force, true, actionHandler);
+	}
+
 	public void bindDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
 		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {
 			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));

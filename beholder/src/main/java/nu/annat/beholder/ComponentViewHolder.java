@@ -56,15 +56,11 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	protected void prepareView() {
 	}
 
-	;
-
 	/**
 	 * Called every time the data is set. use it to bind data from the presenter to the view
 	 */
 	protected void prepareData() {
 	}
-
-	;
 
 	public int getLayoutId() {
 		return layoutId;

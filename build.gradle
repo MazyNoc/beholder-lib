@@ -47,6 +47,6 @@ task pushTag(type: GitPush, dependsOn: createTag) {
     namesOrSpecs = [niceVersion]
 }
 
-task fullRelease(dependsOn: ['pushTag', ':library:bintrayUpload', ':jsonconverter:bintrayUpload']) {
+task fullRelease(dependsOn: ['pushTag', ':beholder:bintrayUpload', ':jsonconverter:bintrayUpload']) {
 }
 //bintrayUpload.dependsOn pushTag

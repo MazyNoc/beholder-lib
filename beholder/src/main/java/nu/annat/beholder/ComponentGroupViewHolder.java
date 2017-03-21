@@ -9,7 +9,7 @@ import java.util.List;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
-public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends ComponentViewHolder<BINDING, PRESENTER> implements ComponentGroup {
+public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo, ACTION> extends ComponentViewHolder<BINDING, PRESENTER, ACTION> implements ComponentGroup {
 
 	protected List<ComponentViewHolder> children = new ArrayList<>();
 

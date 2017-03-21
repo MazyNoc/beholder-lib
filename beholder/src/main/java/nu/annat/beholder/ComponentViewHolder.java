@@ -7,7 +7,7 @@ import android.view.View;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 
-public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo> extends RecyclerView.ViewHolder {
+public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo, ACTION> extends RecyclerView.ViewHolder {
 
 	protected final BINDING binding;
 	protected final ActionHandler actionHandler;
@@ -70,7 +70,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		return reuseId;
 	}
 
-	protected void act(final Object action) {
+	protected void act(final ACTION action) {
 		if (actionHandler != null) {
 			actionHandler.handle(action);
 		}

@@ -7,7 +7,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActionHandler {
+public class ActionHandler<ACTION> {
 	private static final String TAG = ActionHandler.class.getSimpleName();
 	private final Handler mainThreadHandler;
 	protected Map<Class<?>, ActionInfo> handlers = new HashMap<>();
@@ -34,7 +34,7 @@ public class ActionHandler {
 		handlers.put(actionClass, new ActionInfo(forceMainThread, onAction));
 	}
 
-	public void handle(final Object action) {
+	public void handle(final ACTION action) {
 		final ActionInfo actionInfo = handlers.get(action.getClass());
 		if (actionInfo == null) {
 			Log.w(TAG, "Action " + action.getClass().getName() + " is not registered");

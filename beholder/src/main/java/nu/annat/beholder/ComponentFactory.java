@@ -2,11 +2,13 @@ package nu.annat.beholder;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,9 +81,9 @@ public class ComponentFactory {
 		}
 	}
 
-	public ComponentViewHolder createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bind, ActionHandler actionHandler) {
+	public ComponentViewHolder createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
 		ComponentViewHolder holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
-		if (bind) holder.setData(componentInfo, force);
+		if (bindPresenter) holder.setData(componentInfo, force);
 		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
 			int childOrder = 0;
@@ -125,11 +127,60 @@ public class ComponentFactory {
 		return null;
 	}
 
-	public void updateDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force, ActionHandler actionHandler) {
+	public void update(ComponentViewHolder holder, boolean force) {
 		ViewGroup vg = ((ViewGroup) holder.itemView);
-		vg.removeAllViews();
-		createDeep(0, 0, componentInfo.getClass(), componentInfo, vg, force, true, actionHandler);
+		//updateDeep(null, holder, holder.getPresenter(), force);
+		// simple solution
+		if (holder instanceof ComponentGroupViewHolder) {
+			ComponentGroupViewHolder groupViewHolder = (ComponentGroupViewHolder) holder;
+			groupViewHolder.removeAll();
+			ViewInformation viewInformation = groupViewHolder.getViewInformation();
+			ActionHandler actionHandler = groupViewHolder.getActionHandler();
+			ComponentInfo presenter = groupViewHolder.getPresenter();
+			ViewGroup parentVG = (ViewGroup) groupViewHolder.getChildArea();
+			int depth = viewInformation.getDepth() + 1;
+			int order = 0;
+			for (ComponentInfo componentInfo : presenter) {
+				groupViewHolder.addChild(createDeep(depth, order++, componentInfo.getClass(), componentInfo, parentVG, force, true, actionHandler));
+			}
+		}
 	}
+
+	public void updateDeep(ComponentGroupViewHolder parent, ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
+		if (holder.getLayoutId() != componentInfo.layoutHash()) {
+			Log.d(TAG, "ID missmatch, recreate");
+			ViewInformation viewInformation = holder.getViewInformation();
+			parent.remove(holder);
+			ViewGroup parentVG = (ViewGroup) parent.itemView;
+			ComponentViewHolder newHolder = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo.getClass(), componentInfo, parentVG, force, true, holder.getActionHandler());
+			parent.addChild(newHolder);
+		} else {
+			Log.d(TAG, "ID match, update data");
+			holder.setData(componentInfo, force);
+		}
+
+		if (holder instanceof ComponentGroupViewHolder) {
+			ComponentGroupViewHolder groupViewHolder = (ComponentGroupViewHolder) holder;
+			List<ComponentViewHolder> holders = new ArrayList<>(groupViewHolder.getChildren());
+			int max = Math.max(holders.size(), componentInfo.size());
+			for (int i = 0; i < max; i++) {
+				if (i >= holders.size()) {
+					Log.d(TAG, "more presenters than views, create new");
+					ViewInformation viewInformation = holder.getViewInformation();
+					ComponentInfo componentInfo1 = componentInfo.get(i);
+					ComponentViewHolder newComponent = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo1.getClass(), componentInfo1, (ViewGroup) groupViewHolder.itemView, force, true, groupViewHolder.getActionHandler());
+					groupViewHolder.addChild(i, newComponent);
+				} else if (i >= componentInfo.size()) {
+					Log.d(TAG, "more views than presenters, remove");
+					groupViewHolder.remove(holders.get(i));
+				} else {
+					Log.d(TAG, "update child");
+					updateDeep(groupViewHolder, holders.get(i), componentInfo.get(i), force);
+				}
+			}
+		}
+	}
+
 
 	public void bindDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
 		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {

@@ -17,6 +17,12 @@ public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, 
 		super(viewInformation, binding, actionHandler, layoutId, reuseId);
 	}
 
+	public void addChild(int index, ComponentViewHolder componentViewHolder) {
+		children.add(index, componentViewHolder);
+		getChildArea().addView(componentViewHolder.itemView, index);
+		onChildAdded(componentViewHolder);
+	}
+
 	public void addChild(ComponentViewHolder componentViewHolder) {
 		children.add(componentViewHolder);
 		getChildArea().addView(componentViewHolder.itemView);
@@ -30,6 +36,11 @@ public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, 
 	public void removeAll() {
 		getChildArea().removeAllViews();
 		children.clear();
+	}
+
+	public void remove(ComponentViewHolder holder) {
+		getChildArea().removeView(holder.itemView);
+		children.remove(holder);
 	}
 
 	public List<ComponentViewHolder> getChildren() {

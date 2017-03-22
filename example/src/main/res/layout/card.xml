@@ -29,6 +29,11 @@
                 android:layout_height="wrap_content"
                 android:text="@{`card depth: ` + String.valueOf(viewInfo.depth)}" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`card order: ` + String.valueOf(viewInfo.order)}" />
+
             <LinearLayout
                 android:id="@+id/childArea"
                 android:layout_width="match_parent"

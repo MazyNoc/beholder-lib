@@ -70,6 +70,14 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		return reuseId;
 	}
 
+	public ViewInformation getViewInformation() {
+		return viewInformation;
+	}
+
+	public ActionHandler getActionHandler() {
+		return actionHandler;
+	}
+
 	protected void act(final ACTION action) {
 		if (actionHandler != null) {
 			actionHandler.handle(action);

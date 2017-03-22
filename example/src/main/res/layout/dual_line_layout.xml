@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="viewInfo"
+            type="nu.annat.beholder.ViewInformation" />
+
+        <variable
             name="presenter"
             type="nu.annat.example.DualLineData"/>
 
@@ -17,11 +21,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
         android:gravity="center_vertical"
         android:minHeight="?attr/listPreferredItemHeight"
-        android:background="?selectableItemBackground"
         android:onClick="@{handler::onCardClick}"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`depth: ` + String.valueOf(viewInfo.depth)}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`order: ` + String.valueOf(viewInfo.order)}" />
 
         <TextView
             android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.DualLineLayoutBinding;
 
 
-public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding, DualLineData> {
+public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding, DualLineData, Object> {
 
 
 	public DualLineComponent(ViewInformation viewInformation, ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
@@ -18,6 +18,7 @@ public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding
 
 	@Override
 	protected void prepareView() {
+		binding.setViewInfo(viewInformation);
 		binding.setHandler(this);
 	}
 

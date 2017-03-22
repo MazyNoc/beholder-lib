@@ -8,7 +8,7 @@ import nu.annat.beholder.ViewInformation;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.example.databinding.CardBinding;
 
-public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardData> {
+public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardData, Object> {
 
 	public CardComponent(ViewInformation viewInformation, ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
 		super(viewInformation, binding, actionHandler, layoutId, reuseId);

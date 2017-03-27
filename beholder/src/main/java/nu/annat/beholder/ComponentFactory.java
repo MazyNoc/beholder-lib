@@ -2,6 +2,7 @@ package nu.annat.beholder;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -32,6 +33,40 @@ public class ComponentFactory {
 			this.layout = layout;
 			this.presenter = presenter;
 			this.viewHolder = viewHolder;
+		}
+	}
+
+	public static Bundle saveStates(List<ComponentInfo> componentInfos, Bundle bundle) {
+		saveStates("", bundle, bundle, componentInfos);
+		return bundle;
+	}
+
+	private static void saveStates(String prefix, Bundle root, Bundle savedComponents, List<ComponentInfo> componentInfos) {
+		int index = 0;
+		for (ComponentInfo componentInfo : componentInfos) {
+			String uniqueId = prefix + ":" + String.valueOf(componentInfo.layoutHash()) + ":" + index;
+			Bundle bundle = new Bundle();
+			componentInfo.saveStates(bundle);
+			savedComponents.putBundle(uniqueId, bundle);
+			saveStates(uniqueId, root, bundle, componentInfo.getChildren());
+			index++;
+		}
+	}
+
+	public static void restoreStates(Bundle bundle, List<ComponentInfo> componentInfos) {
+		restoreStates("", bundle, bundle, componentInfos);
+	}
+
+	private static void restoreStates(String prefix, Bundle root, Bundle bundle, List<ComponentInfo> componentInfos) {
+		int index = 0;
+		for (ComponentInfo componentInfo : componentInfos) {
+			String uniqueId = prefix + ":" + String.valueOf(componentInfo.layoutHash()) + ":" + index;
+			Bundle objectBundle = bundle.getBundle(uniqueId);
+			if (objectBundle != null) {
+				componentInfo.restoreStates(objectBundle);
+				restoreStates(uniqueId, root, objectBundle, componentInfo.getChildren());
+			}
+			index++;
 		}
 	}
 

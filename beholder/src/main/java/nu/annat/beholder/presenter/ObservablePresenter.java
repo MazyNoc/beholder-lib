@@ -1,6 +1,7 @@
 package nu.annat.beholder.presenter;
 
 import android.databinding.BaseObservable;
+import android.os.Bundle;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,5 +51,20 @@ public class ObservablePresenter extends BaseObservable implements ComponentInfo
 	@Override
 	public Iterator<ComponentInfo> iterator() {
 		return delegate.iterator();
+	}
+
+	@Override
+	public String uniqueId() {
+		return null;
+	}
+
+	@Override
+	public void saveStates(Bundle extras) {
+
+	}
+
+	@Override
+	public void restoreStates(Bundle extras) {
+
 	}
 }

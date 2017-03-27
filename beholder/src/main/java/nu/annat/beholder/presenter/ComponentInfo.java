@@ -1,5 +1,7 @@
 package nu.annat.beholder.presenter;
 
+import android.os.Bundle;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -34,4 +36,10 @@ public interface ComponentInfo extends Iterable<ComponentInfo> {
 	int size();
 
 	Iterator<ComponentInfo> iterator();
+
+	String uniqueId();
+
+	void saveStates(Bundle extras);
+
+	void restoreStates(Bundle extras);
 }

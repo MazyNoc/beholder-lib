@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/beholder/beholder.iml" filepath="$PROJECT_DIR$/beholder/beholder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/beholder.iml" filepath="$PROJECT_DIR$/beholder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/beholder/beholder-beholder.iml" filepath="$PROJECT_DIR$/beholder/beholder-beholder.iml" />
       <module fileurl="file://$PROJECT_DIR$/beholder-lib.iml" filepath="$PROJECT_DIR$/beholder-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsonconverter/jsonconverter.iml" filepath="$PROJECT_DIR$/jsonconverter/jsonconverter.iml" />

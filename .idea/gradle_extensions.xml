@@ -6,7 +6,7 @@
         <project path="$PROJECT_DIR$">
           <extensions>
             <ext name="ext" type="org.gradle.api.internal.plugins.DefaultExtraPropertiesExtension" />
-            <prop name="niceVersion">0.6.0</prop>
+            <prop name="niceVersion">0.6.1</prop>
             <task name="projects" type="org.gradle.api.tasks.diagnostics.ProjectReportTask">Displays the sub-projects of root project 'beholder-lib'.&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
             <task name="packageReleaseResources" type="com.android.build.gradle.tasks.MergeResources">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="validateSigningDebugAndroidTest" type="com.android.build.gradle.internal.tasks.ValidateSigningTask">&lt;i&gt;Task group: other&lt;i&gt;</task>

@@ -7,12 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,7 @@ public class ComponentFactory {
 
 	private static final String TAG = ComponentFactory.class.getSimpleName();
 	protected Map<Class<? extends ComponentInfo>, Component> components = new HashMap<>();
+	private List<WeakReference<ComponentViewHolder>> activeComponents = new LinkedList<>();
 
 	public static class Component {
 		public Class<? extends ComponentViewHolder> viewHolder;
@@ -149,7 +153,9 @@ public class ComponentFactory {
 		// until java 8, reflection
 		try {
 			Constructor<? extends ComponentViewHolder> constructor = it.viewHolder.getConstructor(ViewInformation.class, ViewDataBinding.class, ActionHandler.class, int.class, int.class);
-			return constructor.newInstance(viewInformation, inflate, actionHandler, layoutId, reuseId);
+			ComponentViewHolder componentViewHolder = constructor.newInstance(viewInformation, inflate, actionHandler, layoutId, reuseId);
+			activeComponents.add(new WeakReference<>(componentViewHolder));
+			return componentViewHolder;
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -160,6 +166,27 @@ public class ComponentFactory {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public List<ComponentViewHolder> getActiveComponents() {
+		compactActiveList();
+		List<ComponentViewHolder> active = new ArrayList<>();
+		for (WeakReference<ComponentViewHolder> activeComponent : activeComponents) {
+			ComponentViewHolder componentViewHolder = activeComponent.get();
+			if (componentViewHolder != null) {
+				active.add(componentViewHolder);
+			}
+		}
+		return active;
+	}
+
+	public void compactActiveList() {
+		Iterator<WeakReference<ComponentViewHolder>> iterator = activeComponents.iterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().get() == null) {
+				iterator.remove();
+			}
+		}
 	}
 
 	public void update(ComponentViewHolder holder, boolean force) {

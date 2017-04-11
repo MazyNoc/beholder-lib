@@ -6,7 +6,7 @@ If you ever created a RecyclerView that should show a range of different list it
 
 The beholder lib is trying to help you reduce your codebase and makes it easier to present in a unified way.
 
-Views are created from their registered presenter classes
+Views are created from their registered presenter classes so teh main job for the developer is to create and fill presenters with their respective data.
 
 Usage:
 
@@ -99,7 +99,23 @@ class ListItem1Component extends ComponentViewHolder<BinderClass, PresenterClass
 	}
 }
 
-
 ```
 
+News in 0.6.0 : 
 
+The library is now updated to Java8 (not the full java8 version, but the limited version in Android studio 2.4)
+This means that we can use method references where we previusly used reflection or anonymous classes
+
+The recommended way to register a component is now :
+```
+factory.register(new Component(Presenter.class, Handler::new, R.layout.layoutid));
+```
+and for actions, 
+```
+actionHandler.register(ToastAction.class, this::toastHandler);
+ 
+public void toastHandler(ToastAction action) {
+	Toast.makeText(MainActivity.this, action.message, Toast.LENGTH_SHORT).show();
+}
+
+```

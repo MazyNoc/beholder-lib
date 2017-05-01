@@ -79,13 +79,12 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 
 	private ActionHandler getActionHandler() {
 		ActionHandler actionHandler = new ActionHandler();
-		actionHandler.register(ToastAction.class, new OnAction<ToastAction>() {
-			@Override
-			public void execute(ToastAction action) {
-				Toast.makeText(MainActivity.this, action.getMessage(), Toast.LENGTH_SHORT).show();
-			}
-		});
+		actionHandler.register(ToastAction.class, (OnAction<ToastAction>) this::executeToastAction);
 		return actionHandler;
+	}
+
+	public void executeToastAction(ToastAction action) {
+		Toast.makeText(MainActivity.this, action.getMessage(), Toast.LENGTH_SHORT).show();
 	}
 
 	private ComponentFactory getFactory() {
@@ -98,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 		// or register one, many or a collection through the registerComponent or registerComponents
 		factory.registerComponents(
 			new Component(DualLineData.class, DualLineComponent.class, R.layout.dual_line_layout),
-			new Component(CardData.class, CardComponent.class, R.layout.card)
+			//new Component(CardData.class, CardComponent.class, R.layout.card)
+			new Component(CardData.class, CardComponent::new, R.layout.card)
 		);
 
 		return factory;

@@ -28,7 +28,12 @@ public class ComponentFactory {
 	protected Map<Class<? extends ComponentInfo>, Component> components = new HashMap<>();
 	private List<WeakReference<ComponentViewHolder>> activeComponents = new LinkedList<>();
 
+	public interface ViewHolderConstructor {
+		ComponentViewHolder create(ViewInformation vi, ViewDataBinding vdb, ActionHandler ah, int layoutId, int reuseId);
+	}
+
 	public static class Component {
+		public ViewHolderConstructor vhc;
 		public Class<? extends ComponentViewHolder> viewHolder;
 		public int layout;
 		public Class<? extends ComponentInfo> presenter;
@@ -38,6 +43,13 @@ public class ComponentFactory {
 			this.presenter = presenter;
 			this.viewHolder = viewHolder;
 		}
+
+		public Component(Class<? extends ComponentInfo> presenter, ViewHolderConstructor viewHolderConstructor, int layout) {
+			this.layout = layout;
+			this.presenter = presenter;
+			this.vhc = viewHolderConstructor;
+		}
+
 	}
 
 	public static Bundle saveStates(List<ComponentInfo> componentInfos, Bundle bundle) {
@@ -150,6 +162,10 @@ public class ComponentFactory {
 
 		ViewInformation viewInformation = new ViewInformation(depth, order);
 
+
+		if (it.vhc != null) {
+			return it.vhc.create(viewInformation, inflate, actionHandler, layoutId, reuseId);
+		}
 		// until java 8, reflection
 		try {
 			Constructor<? extends ComponentViewHolder> constructor = it.viewHolder.getConstructor(ViewInformation.class, ViewDataBinding.class, ActionHandler.class, int.class, int.class);

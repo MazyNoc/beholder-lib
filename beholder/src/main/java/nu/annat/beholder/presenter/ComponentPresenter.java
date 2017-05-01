@@ -1,6 +1,7 @@
 package nu.annat.beholder.presenter;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class ComponentPresenter implements ComponentInfo {
 
 	/**
 	 * Convenience constructor when its used as a delegate class (see {@link ObservablePresenter}
+	 *
 	 * @param impersonate, the instance that uses this as a delegate class. Is used for the hash-code calculations
 	 */
 	public ComponentPresenter(ComponentInfo impersonate) {
@@ -76,8 +78,8 @@ public class ComponentPresenter implements ComponentInfo {
 	}
 
 	@Override
-	public String uniqueId() {
-		return null;
+	public long itemId() {
+		return RecyclerView.NO_ID;
 	}
 
 	@Override

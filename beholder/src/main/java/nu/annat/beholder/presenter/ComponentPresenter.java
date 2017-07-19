@@ -1,6 +1,7 @@
 package nu.annat.beholder.presenter;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,8 +77,8 @@ public class ComponentPresenter implements ComponentInfo {
 	}
 
 	@Override
-	public String uniqueId() {
-		return null;
+	public long itemId() {
+		return RecyclerView.NO_ID;
 	}
 
 	@Override

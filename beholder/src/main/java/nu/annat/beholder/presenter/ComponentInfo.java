@@ -37,7 +37,7 @@ public interface ComponentInfo extends Iterable<ComponentInfo> {
 
 	Iterator<ComponentInfo> iterator();
 
-	String uniqueId();
+	long itemId();
 
 	void saveStates(Bundle extras);
 

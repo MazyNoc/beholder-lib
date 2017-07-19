@@ -24,9 +24,14 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
 	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler) {
+		this(factory, data, actionHandler, false);
+	}
+
+	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler, boolean hasStableIds) {
 		this.factory = factory;
 		this.data = data;
 		this.actionHandler = actionHandler;
+		setHasStableIds(hasStableIds);
 	}
 
 	@Override
@@ -40,6 +45,11 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 		int deepLayoutHash = componentInfo.deepLayoutHash();
 		cachedPresenters.put(deepLayoutHash, componentInfo);
 		return deepLayoutHash;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return data.get(position).itemId();
 	}
 
 	protected ComponentInfo getItem(int position) {

@@ -1,0 +1,39 @@
+package nu.annat.beholder;
+
+import android.support.v7.util.DiffUtil;
+
+import java.util.List;
+
+import nu.annat.beholder.presenter.ComponentInfo;
+
+public class LayoutDiff extends DiffUtil.Callback {
+
+	private final ComponentGroup oldList;
+	private final List<ComponentInfo> newList;
+
+	public LayoutDiff(ComponentGroup oldList, List<ComponentInfo> newList) {
+		this.oldList = oldList;
+		this.newList = newList;
+	}
+
+	@Override
+	public int getOldListSize() {
+		return oldList.size();
+	}
+
+	@Override
+	public int getNewListSize() {
+		return newList.size();
+	}
+
+	@Override
+	public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+		return oldList.get(oldItemPosition).getLayoutId() == newList.get(newItemPosition).layoutHash();
+	}
+
+	@Override
+	public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+		//return oldList.get(oldItemPosition).deepLayoutHash() == newList.get(newItemPosition).deepLayoutHash();
+		return false;
+	}
+}

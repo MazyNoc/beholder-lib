@@ -3,6 +3,8 @@ package nu.annat.beholder;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
+import android.support.v7.util.ListUpdateCallback;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import nu.annat.beholder.action.ActionHandler;
+import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public class ComponentFactory {
@@ -29,7 +32,7 @@ public class ComponentFactory {
 	private List<WeakReference<ComponentViewHolder>> activeComponents = new LinkedList<>();
 
 	public interface ViewHolderConstructor {
-		ComponentViewHolder create(ViewInformation vi, ViewDataBinding vdb, ActionHandler ah, int layoutId, int reuseId);
+		ComponentViewHolder create(ComponentData baseData);
 	}
 
 	public static class Component {
@@ -164,7 +167,8 @@ public class ComponentFactory {
 
 
 		if (it.vhc != null) {
-			return it.vhc.create(viewInformation, inflate, actionHandler, layoutId, reuseId);
+			ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
+			return it.vhc.create(componentData);
 		}
 		// until java 8, reflection
 		try {
@@ -207,6 +211,7 @@ public class ComponentFactory {
 
 	public void update(ComponentViewHolder holder, boolean force) {
 		ViewGroup vg = ((ViewGroup) holder.itemView);
+
 		//updateDeep(null, holder, holder.getPresenter(), force);
 		// simple solution
 		if (holder instanceof ComponentGroupViewHolder) {
@@ -225,6 +230,7 @@ public class ComponentFactory {
 	}
 
 	public void updateDeep(ComponentGroupViewHolder parent, ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
+
 		if (holder.getLayoutId() != componentInfo.layoutHash()) {
 			Log.d(TAG, "ID missmatch, recreate");
 			ViewInformation viewInformation = holder.getViewInformation();
@@ -240,22 +246,46 @@ public class ComponentFactory {
 		if (holder instanceof ComponentGroupViewHolder) {
 			ComponentGroupViewHolder groupViewHolder = (ComponentGroupViewHolder) holder;
 			List<ComponentViewHolder> holders = new ArrayList<>(groupViewHolder.getChildren());
-			int max = Math.max(holders.size(), componentInfo.size());
-			for (int i = 0; i < max; i++) {
-				if (i >= holders.size()) {
-					Log.d(TAG, "more presenters than views, create new");
-					ViewInformation viewInformation = holder.getViewInformation();
-					ComponentInfo componentInfo1 = componentInfo.get(i);
-					ComponentViewHolder newComponent = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo1.getClass(), componentInfo1, (ViewGroup) groupViewHolder.itemView, force, true, groupViewHolder.getActionHandler());
-					groupViewHolder.addChild(i, newComponent);
-				} else if (i >= componentInfo.size()) {
-					Log.d(TAG, "more views than presenters, remove");
-					groupViewHolder.remove(holders.get(i));
-				} else {
-					Log.d(TAG, "update child");
-					updateDeep(groupViewHolder, holders.get(i), componentInfo.get(i), force);
-				}
-			}
+
+//			LayoutDiff diff = new LayoutDiff(holder, componentInfo.getChildren());
+//			DiffUtil.calculateDiff(diff).dispatchUpdatesTo(new ListUpdateCallback() {
+//				@Override
+//				public void onInserted(int position, int count) {
+//
+//				}
+//
+//				@Override
+//				public void onRemoved(int position, int count) {
+//
+//				}
+//
+//				@Override
+//				public void onMoved(int fromPosition, int toPosition) {
+//
+//				}
+//
+//				@Override
+//				public void onChanged(int position, int count, Object payload) {
+//
+//				}
+//			});
+
+//			int max = Math.max(holders.size(), componentInfo.size());
+//			for (int i = 0; i < max; i++) {
+//				if (i >= holders.size()) {
+//					Log.d(TAG, "more presenters than views, create new");
+//					ViewInformation viewInformation = holder.getViewInformation();
+//					ComponentInfo componentInfo1 = componentInfo.get(i);
+//					ComponentViewHolder newComponent = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo1.getClass(), componentInfo1, (ViewGroup) groupViewHolder.itemView, force, true, groupViewHolder.getActionHandler());
+//					groupViewHolder.addChild(i, newComponent);
+//				} else if (i >= componentInfo.size()) {
+//					Log.d(TAG, "more views than presenters, remove");
+//					groupViewHolder.remove(holders.get(i));
+//				} else {
+//					Log.d(TAG, "update child");
+//					updateDeep(groupViewHolder, holders.get(i), componentInfo.get(i), force);
+//				}
+//			}
 		}
 	}
 

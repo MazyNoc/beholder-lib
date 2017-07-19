@@ -6,12 +6,13 @@ import android.view.ViewGroup;
 import nu.annat.beholder.ComponentGroupViewHolder;
 import nu.annat.beholder.ViewInformation;
 import nu.annat.beholder.action.ActionHandler;
+import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.example.databinding.CardBinding;
 
 public class CardComponent extends ComponentGroupViewHolder<CardBinding, CardData, Object> {
 
-	public CardComponent(ViewInformation viewInformation, ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
-		super(viewInformation, binding, actionHandler, layoutId, reuseId);
+	public CardComponent(ComponentData baseData) {
+		super(baseData);
 	}
 
 	@Override

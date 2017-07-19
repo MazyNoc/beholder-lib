@@ -7,14 +7,15 @@ import java.util.Collections;
 import java.util.List;
 
 import nu.annat.beholder.action.ActionHandler;
+import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public abstract class ComponentGroupViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo, ACTION> extends ComponentViewHolder<BINDING, PRESENTER, ACTION> implements ComponentGroup {
 
 	protected List<ComponentViewHolder> children = new ArrayList<>();
 
-	public ComponentGroupViewHolder(ViewInformation viewInformation, ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
-		super(viewInformation, binding, actionHandler, layoutId, reuseId);
+	public ComponentGroupViewHolder(ComponentData baseData) {
+		super(baseData);
 	}
 
 	public void addChild(int index, ComponentViewHolder componentViewHolder) {

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import nu.annat.beholder.action.ActionHandler;
+import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESENTER extends ComponentInfo, ACTION> extends RecyclerView.ViewHolder {
@@ -26,14 +27,14 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		viewInformation = null;
 	}
 
-	public ComponentViewHolder(ViewInformation viewInformation, final ViewDataBinding binding, ActionHandler actionHandler, int layoutId, int reuseId) {
-		super(binding.getRoot());
-		this.layoutId = layoutId;
-		this.actionHandler = actionHandler;
-		this.reuseId = reuseId;
+	public ComponentViewHolder(ComponentData baseData) {
+		super(baseData.binding.getRoot());
+		this.layoutId = baseData.layoutId;
+		this.actionHandler = baseData.actionHandler;
+		this.reuseId = baseData.reuseId;
 		//noinspection unchecked
-		this.binding = (BINDING) binding;
-		this.viewInformation = viewInformation;
+		this.binding = (BINDING) baseData.binding;
+		this.viewInformation = baseData.viewInformation;
 		prepareView();
 	}
 

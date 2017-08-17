@@ -127,7 +127,7 @@ public class ComponentFactory {
 	}
 
 	public <T extends ComponentViewHolder> T createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, @NonNull ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
-		final Stats deepLayoutStats = Stats.start("Create Deep" + presenterClass.getName() + ", with deep id " + componentInfo.deepLayoutHash());
+		final Stats deepLayoutStats = Stats.start("Create Deep " + componentInfo.getClass().getSimpleName() + ", with deep id " + componentInfo.deepLayoutHash());
 		T holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
 		if (bindPresenter) holder.setData(componentInfo, force);
 		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
@@ -144,7 +144,7 @@ public class ComponentFactory {
 	}
 
 	protected <T extends ComponentViewHolder> T createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		final Stats createViewStats = Stats.start("Create View" + presenterClass.getName());
+		final Stats createViewStats = Stats.start("Create View " + componentInfo.getClass().getSimpleName());
 		Component it = getIt(presenterClass);
 		int layoutId = componentInfo.layoutHash();
 		int reuseId = componentInfo.deepLayoutHash();
@@ -159,8 +159,10 @@ public class ComponentFactory {
 
 		ViewInformation viewInformation = new ViewInformation(depth, order);
 
+		final Stats createViewHolderStats = Stats.start();
 		ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
 		T componentViewHolder = (T) it.vhc.create(componentData);
+		Log.i(TAG, createViewHolderStats.stop("Create Viewholder " + componentViewHolder.getClass().getSimpleName()));
 		Log.i(TAG, createViewStats.stop());
 		return componentViewHolder;
 	}

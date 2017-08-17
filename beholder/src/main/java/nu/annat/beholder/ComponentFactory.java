@@ -3,15 +3,12 @@ package nu.annat.beholder;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.util.ListUpdateCallback;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import nu.annat.beholder.action.ActionHandler;
@@ -31,23 +29,16 @@ public class ComponentFactory {
 	protected Map<Class<? extends ComponentInfo>, Component> components = new HashMap<>();
 	private List<WeakReference<ComponentViewHolder>> activeComponents = new LinkedList<>();
 
-	public interface ViewHolderConstructor {
-		ComponentViewHolder create(ComponentData baseData);
+	public interface ViewHolderConstructor<T extends ComponentViewHolder> {
+		T create(ComponentData baseData);
 	}
 
-	public static class Component {
-		public ViewHolderConstructor vhc;
-		public Class<? extends ComponentViewHolder> viewHolder;
+	public static class Component<T extends ComponentViewHolder> {
+		public ViewHolderConstructor<T> vhc;
 		public int layout;
 		public Class<? extends ComponentInfo> presenter;
 
-		public Component(Class<? extends ComponentInfo> presenter, Class<? extends ComponentViewHolder> viewHolder, int layout) {
-			this.layout = layout;
-			this.presenter = presenter;
-			this.viewHolder = viewHolder;
-		}
-
-		public Component(Class<? extends ComponentInfo> presenter, ViewHolderConstructor viewHolderConstructor, int layout) {
+		public Component(Class<? extends ComponentInfo> presenter, ViewHolderConstructor<T> viewHolderConstructor, int layout) {
 			this.layout = layout;
 			this.presenter = presenter;
 			this.vhc = viewHolderConstructor;
@@ -135,8 +126,9 @@ public class ComponentFactory {
 		}
 	}
 
-	public ComponentViewHolder createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
-		ComponentViewHolder holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
+	public <T extends ComponentViewHolder> T createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, @NonNull ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
+		final Stats deepLayoutStats = Stats.start("Create Deep" + presenterClass.getName() + ", with deep id " + componentInfo.deepLayoutHash());
+		T holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
 		if (bindPresenter) holder.setData(componentInfo, force);
 		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
@@ -147,10 +139,12 @@ public class ComponentFactory {
 				componentGroup.addChild(deep);
 			}
 		}
+		Log.i(TAG, deepLayoutStats.stop());
 		return holder;
 	}
 
-	protected ComponentViewHolder createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+	protected <T extends ComponentViewHolder> T createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+		final Stats createViewStats = Stats.start("Create View" + presenterClass.getName());
 		Component it = getIt(presenterClass);
 		int layoutId = componentInfo.layoutHash();
 		int reuseId = componentInfo.deepLayoutHash();
@@ -165,27 +159,10 @@ public class ComponentFactory {
 
 		ViewInformation viewInformation = new ViewInformation(depth, order);
 
-
-		if (it.vhc != null) {
-			ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
-			return it.vhc.create(componentData);
-		}
-		// until java 8, reflection
-		try {
-			Constructor<? extends ComponentViewHolder> constructor = it.viewHolder.getConstructor(ViewInformation.class, ViewDataBinding.class, ActionHandler.class, int.class, int.class);
-			ComponentViewHolder componentViewHolder = constructor.newInstance(viewInformation, inflate, actionHandler, layoutId, reuseId);
-			activeComponents.add(new WeakReference<>(componentViewHolder));
-			return componentViewHolder;
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
+		ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
+		T componentViewHolder = (T) it.vhc.create(componentData);
+		Log.i(TAG, createViewStats.stop());
+		return componentViewHolder;
 	}
 
 	public List<ComponentViewHolder> getActiveComponents() {
@@ -292,7 +269,7 @@ public class ComponentFactory {
 
 	public void bindDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
 		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {
-			throw new RuntimeException(String.format("Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
+			throw new RuntimeException(String.format(Locale.ROOT, "Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
 
 		holder.setData(componentInfo, force);

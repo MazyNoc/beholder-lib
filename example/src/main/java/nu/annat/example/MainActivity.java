@@ -91,12 +91,12 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 		// you can either send one, many or a collection in the constructor
 
 		ComponentFactory factory = new ComponentFactory(
-			new Component(SingleLineData.class, SingleLineComponent.class, R.layout.single_line_layout)
+			new Component(SingleLineData.class, SingleLineComponent::new, R.layout.single_line_layout)
 		);
 
 		// or register one, many or a collection through the registerComponent or registerComponents
 		factory.registerComponents(
-			new Component(DualLineData.class, DualLineComponent.class, R.layout.dual_line_layout),
+			new Component(DualLineData.class, DualLineComponent::new, R.layout.dual_line_layout),
 			//new Component(CardData.class, CardComponent.class, R.layout.card)
 			new Component(CardData.class, CardComponent::new, R.layout.card)
 		);

@@ -12,19 +12,19 @@ import nu.annat.beholder.presenter.ComponentInfo;
 /**
  * Helper to use components directly as RecycleView item objects.
  */
-public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
+public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adapter<ComponentViewHolder> {
 	private static final String TAG = BeholderAdapter.class.getSimpleName();
 
 	protected final ActionHandler actionHandler;
-	protected final List<ComponentInfo> data;
+	protected final List<T> data;
 	protected ComponentFactory factory;
 	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
-	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler) {
+	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler) {
 		this(factory, data, actionHandler, false);
 	}
 
-	public BeholderAdapter(ComponentFactory factory, List<ComponentInfo> data, ActionHandler actionHandler, boolean hasStableIds) {
+	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler, boolean hasStableIds) {
 		this.factory = factory;
 		this.data = data;
 		this.actionHandler = actionHandler;
@@ -53,7 +53,7 @@ public class BeholderAdapter extends RecyclerView.Adapter<ComponentViewHolder> {
 		return data.get(position);
 	}
 
-	public List<ComponentInfo> getData() {
+	public List<T> getData() {
 		return data;
 	}
 

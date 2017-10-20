@@ -63,6 +63,18 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 	}
 
 	@Override
+	public void onViewAttachedToWindow(ComponentViewHolder holder) {
+		super.onViewAttachedToWindow(holder);
+		holder.attached();
+	}
+
+	@Override
+	public void onViewDetachedFromWindow(ComponentViewHolder holder) {
+		super.onViewDetachedFromWindow(holder);
+		holder.detached();
+	}
+
+	@Override
 	public int getItemCount() {
 		return data == null ? 0 : data.size();
 	}

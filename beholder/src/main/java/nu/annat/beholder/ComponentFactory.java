@@ -43,7 +43,6 @@ public class ComponentFactory {
 			this.presenter = presenter;
 			this.vhc = viewHolderConstructor;
 		}
-
 	}
 
 	public static Bundle saveStates(List<ComponentInfo> componentInfos, Bundle bundle) {

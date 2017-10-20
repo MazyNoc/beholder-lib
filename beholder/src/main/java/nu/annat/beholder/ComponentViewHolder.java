@@ -16,6 +16,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	private final int layoutId;
 	private final int reuseId;
 	protected PRESENTER presenter;
+	private boolean attached;
 
 	// debug constructor
 	private ComponentViewHolder(View view) {
@@ -85,4 +86,26 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		}
 	}
 
+	void attached() {
+		this.attached = true;
+		onAttached();
+	}
+
+	protected void onAttached() {
+
+	}
+
+
+	void detached() {
+		this.attached = false;
+		onDetached();
+	}
+
+	protected void onDetached() {
+
+	}
+
+	public boolean isAttached() {
+		return attached;
+	}
 }

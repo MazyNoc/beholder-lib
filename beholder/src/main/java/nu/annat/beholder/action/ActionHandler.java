@@ -10,34 +10,44 @@ import java.util.Map;
 public class ActionHandler<ACTION> {
 	private static final String TAG = ActionHandler.class.getSimpleName();
 	private final Handler mainThreadHandler;
-	protected Map<Class<?>, ActionInfo> handlers = new HashMap<>();
+	private final ActionHandler<ACTION> delegate;
+	protected Map<Class<? extends ACTION>, ActionInfo<? extends ACTION>> handlers = new HashMap<>();
 
-	private static class ActionInfo {
+	private static class ActionInfo<ACTION> {
 		private final boolean forceMainThread;
-		private final OnAction onAction;
+		private final OnAction<ACTION> onAction;
 
-		public ActionInfo(boolean forceMainThread, OnAction onAction) {
+		public ActionInfo(boolean forceMainThread, OnAction<ACTION> onAction) {
 			this.forceMainThread = forceMainThread;
 			this.onAction = onAction;
 		}
 	}
 
 	public ActionHandler() {
-		this.mainThreadHandler = new Handler(Looper.getMainLooper());
+		this(null);
 	}
 
-	public <T> void register(Class<? extends T> actionClass, OnAction<T> onAction) {
+	public ActionHandler(ActionHandler<ACTION> delegate) {
+		this.mainThreadHandler = new Handler(Looper.getMainLooper());
+		this.delegate = delegate;
+	}
+
+	public <T extends ACTION> void register(Class<? extends T> actionClass, OnAction<T> onAction) {
 		register(actionClass, onAction, false);
 	}
 
-	public <T> void register(Class<? extends T> actionClass, OnAction<T> onAction, boolean forceMainThread) {
-		handlers.put(actionClass, new ActionInfo(forceMainThread, onAction));
+	public <T extends ACTION> void register(Class<? extends T> actionClass, OnAction<T> onAction, boolean forceMainThread) {
+		handlers.put(actionClass, new ActionInfo<T>(forceMainThread, onAction));
 	}
 
 	public void handle(final ACTION action) {
 		final ActionInfo actionInfo = handlers.get(action.getClass());
 		if (actionInfo == null) {
-			Log.w(TAG, "Action " + action.getClass().getName() + " is not registered");
+			if (delegate != null) {
+				delegate.handle(action);
+			} else {
+				Log.w(TAG, "Action " + action.getClass().getName() + " is not registered");
+			}
 		} else {
 			if (actionInfo.forceMainThread && !isOnMainThread()) {
 				mainThreadHandler.post(new Runnable() {

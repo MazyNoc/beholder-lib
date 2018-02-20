@@ -32,11 +32,11 @@ public class ActionHandler<ACTION> {
 		this.delegate = delegate;
 	}
 
-	public <T extends ACTION> void register(Class<? extends T> actionClass, OnAction<T> onAction) {
+	public <T extends ACTION> void register(Class<T> actionClass, OnAction<T> onAction) {
 		register(actionClass, onAction, false);
 	}
 
-	public <T extends ACTION> void register(Class<? extends T> actionClass, OnAction<T> onAction, boolean forceMainThread) {
+	public <T extends ACTION> void register(Class<T> actionClass, OnAction<T> onAction, boolean forceMainThread) {
 		handlers.put(actionClass, new ActionInfo<T>(forceMainThread, onAction));
 	}
 

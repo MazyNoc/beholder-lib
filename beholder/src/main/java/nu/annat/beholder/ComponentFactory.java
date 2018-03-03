@@ -24,8 +24,8 @@ import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
 
 public class ComponentFactory {
-
 	private static final String TAG = ComponentFactory.class.getSimpleName();
+	public static boolean loggingEnabled = false;
 	protected Map<Class<? extends ComponentInfo>, Component> components = new HashMap<>();
 	private List<WeakReference<ComponentViewHolder>> activeComponents = new LinkedList<>();
 
@@ -138,7 +138,7 @@ public class ComponentFactory {
 				componentGroup.addChild(deep);
 			}
 		}
-		Log.i(TAG, deepLayoutStats.stop());
+		if (loggingEnabled) Log.v(TAG, deepLayoutStats.stop());
 		return holder;
 	}
 
@@ -161,8 +161,8 @@ public class ComponentFactory {
 		final Stats createViewHolderStats = Stats.start();
 		ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
 		T componentViewHolder = (T) it.vhc.create(componentData);
-		Log.i(TAG, createViewHolderStats.stop("Create Viewholder " + componentViewHolder.getClass().getSimpleName()));
-		Log.i(TAG, createViewStats.stop());
+		if (loggingEnabled) Log.v(TAG, createViewHolderStats.stop("Create Viewholder " + componentViewHolder.getClass().getSimpleName()));
+		if (loggingEnabled) Log.v(TAG, createViewStats.stop());
 		return componentViewHolder;
 	}
 
@@ -210,14 +210,14 @@ public class ComponentFactory {
 	public void updateDeep(ComponentGroupViewHolder parent, ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
 
 		if (holder.getLayoutId() != componentInfo.layoutHash()) {
-			Log.d(TAG, "ID missmatch, recreate");
+			if (loggingEnabled) Log.v(TAG, "ID missmatch, recreate");
 			ViewInformation viewInformation = holder.getViewInformation();
 			parent.remove(holder);
 			ViewGroup parentVG = (ViewGroup) parent.itemView;
 			ComponentViewHolder newHolder = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo.getClass(), componentInfo, parentVG, force, true, holder.getActionHandler());
 			parent.addChild(newHolder);
 		} else {
-			Log.d(TAG, "ID match, update data");
+			if (loggingEnabled) Log.v(TAG, "ID match, update data");
 			holder.setData(componentInfo, force);
 		}
 

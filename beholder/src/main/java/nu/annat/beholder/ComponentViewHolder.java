@@ -12,9 +12,9 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 
 	protected final BINDING binding;
 	protected final ActionHandler actionHandler;
-	protected final ViewInformation viewInformation;
 	private final int layoutId;
 	private final int reuseId;
+	protected ViewInformation viewInformation;
 	protected PRESENTER presenter;
 	private boolean attached;
 
@@ -74,6 +74,10 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 
 	public ViewInformation getViewInformation() {
 		return viewInformation;
+	}
+
+	public void setViewInformation(ViewInformation viewInformation) {
+		this.viewInformation = viewInformation;
 	}
 
 	public ActionHandler getActionHandler() {

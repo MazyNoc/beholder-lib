@@ -267,12 +267,16 @@ public class ComponentFactory {
 		}
 	}
 
-
 	public void bindDeep(ComponentViewHolder holder, ComponentInfo componentInfo, boolean force) {
+		bindDeep(holder, 0, componentInfo, force);
+	}
+
+	public void bindDeep(ComponentViewHolder holder, int order, ComponentInfo componentInfo, boolean force) {
 		if (holder.getReuseId() != componentInfo.deepLayoutHash()) {
 			throw new RuntimeException(String.format(Locale.ROOT, "Component does not fit the layout, holder = %d, componentInfo = %d", holder.getLayoutId(), componentInfo.layoutHash()));
 		}
 
+		holder.setViewInformation(new ViewInformation(holder.viewInformation.getDepth(), order));
 		holder.setData(componentInfo, force);
 		if (componentInfo instanceof ComponentInfo && holder instanceof ComponentGroup) {
 			ComponentGroup componentGroup = (ComponentGroup) holder;
@@ -294,6 +298,10 @@ public class ComponentFactory {
 
 	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
 		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
+	}
+
+	public <T extends ComponentViewHolder> T create(int order, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+		return (T) createDeep(0, order, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
 	}
 
 	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {

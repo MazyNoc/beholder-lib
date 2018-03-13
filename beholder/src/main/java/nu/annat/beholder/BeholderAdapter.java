@@ -59,7 +59,7 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 
 	@Override
 	public void onBindViewHolder(ComponentViewHolder holder, int position) {
-		factory.bindDeep(holder, getItem(position), true);
+		factory.bindDeep(holder, position, getItem(position), true);
 	}
 
 	@Override

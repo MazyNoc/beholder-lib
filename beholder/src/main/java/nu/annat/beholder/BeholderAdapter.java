@@ -17,23 +17,29 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 
 	protected final ActionHandler actionHandler;
 	protected final List<T> data;
+	private final int baseDepth;
 	protected ComponentFactory factory;
 	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
 	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler) {
-		this(factory, data, actionHandler, false);
+		this(factory, 0, data, actionHandler, false);
 	}
 
 	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler, boolean hasStableIds) {
+		this(factory, 0, data, actionHandler, hasStableIds);
+	}
+
+	public BeholderAdapter(ComponentFactory factory, int baseDepth, List<T> data, ActionHandler actionHandler, boolean hasStableIds) {
 		this.factory = factory;
 		this.data = data;
 		this.actionHandler = actionHandler;
+		this.baseDepth = baseDepth;
 		setHasStableIds(hasStableIds);
 	}
 
 	@Override
 	public ComponentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return factory.createReusable(cachedPresenters.get(viewType), parent, actionHandler);
+		return factory.createReusable(cachedPresenters.get(viewType), this.baseDepth, parent, actionHandler);
 	}
 
 	@Override

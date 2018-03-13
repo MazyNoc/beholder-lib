@@ -308,6 +308,10 @@ public class ComponentFactory {
 		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
 	}
 
+	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, int depth, ViewGroup root, ActionHandler actionHandler) {
+		return (T) createDeep(depth, 0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
+	}
+
 	public <T extends ComponentViewHolder> T createReusable(Class<? extends ComponentInfo> presenterClass, ViewGroup root, ActionHandler actionHandler) {
 		return (T) createDeep(0, 0, presenterClass, null, root, false, false, actionHandler);
 	}

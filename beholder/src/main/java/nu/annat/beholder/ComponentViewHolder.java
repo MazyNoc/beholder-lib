@@ -45,6 +45,9 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	}
 
 	public void setData(PRESENTER presenter, boolean force) {
+		if (this.presenter != null) {
+			releasePresenter(this.presenter);
+		}
 		this.presenter = presenter;
 		prepareData();
 		if (force) {
@@ -62,6 +65,13 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	 * Called every time the data is set. use it to bind data from the presenter to the view
 	 */
 	protected void prepareData() {
+	}
+
+	/**
+	 * Called every time the data released. can be used to save states and so on.
+	 */
+	protected void releasePresenter(PRESENTER presenter) {
+
 	}
 
 	public int getLayoutId() {

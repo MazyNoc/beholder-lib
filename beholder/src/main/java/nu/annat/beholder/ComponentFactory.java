@@ -134,7 +134,7 @@ public class ComponentFactory {
 			int childOrder = 0;
 			depth++;
 			for (final ComponentInfo component : componentInfo.getChildren()) {
-				ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, true, actionHandler);
+				ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, bindPresenter, actionHandler);
 				componentGroup.addChild(deep);
 			}
 		}

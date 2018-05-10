@@ -17,7 +17,7 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 
 	protected final ActionHandler actionHandler;
 	protected final List<T> data;
-	private final int baseDepth;
+	protected final int baseDepth;
 	protected ComponentFactory factory;
 	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
@@ -52,7 +52,7 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 
 	@Override
 	public long getItemId(int position) {
-		return data.get(position).itemId();
+		return getItem(position).itemId();
 	}
 
 	protected ComponentInfo getItem(int position) {

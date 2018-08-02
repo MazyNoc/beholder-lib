@@ -1,11 +1,11 @@
 package nu.annat.beholder;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
 

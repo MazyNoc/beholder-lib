@@ -14,16 +14,16 @@ public class DualLineComponent extends ComponentViewHolder<DualLineLayoutBinding
 
 	@Override
 	protected void prepareView() {
-		binding.setViewInfo(viewInformation);
 		binding.setHandler(this);
 	}
 
 	@Override
 	protected void prepareData() {
+		binding.setViewInfo(viewInformation);
 		binding.setPresenter(presenter);
 	}
 
 	public void onCardClick(View view) {
-		act(new ToastAction(getPresenter().getHeader()));
+		act(new ToastAction(getPresenter().getHeader(), presenter));
 	}
 }

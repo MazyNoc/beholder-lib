@@ -1,12 +1,14 @@
 package nu.annat.beholder.presenter;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+import nu.annat.beholder.BeholderAdapter;
 
 /**
  * Even if most presenters don't have children, the Android implementation of an empty
@@ -16,6 +18,7 @@ public class ComponentPresenter implements ComponentInfo {
 
 	private final ComponentInfo base;
 	private final List<ComponentInfo> children = new ArrayList<>();
+	private BeholderAdapter<?> adapter;
 
 	public ComponentPresenter() {
 		super();
@@ -91,4 +94,15 @@ public class ComponentPresenter implements ComponentInfo {
 	public void restoreStates(Bundle extras) {
 
 	}
+
+	@Override
+	public BeholderAdapter<?> getAdapter() {
+		return adapter;
+	}
+
+	@Override
+	public void setAdapter(BeholderAdapter<?> adapter) {
+		this.adapter = adapter;
+	}
+
 }

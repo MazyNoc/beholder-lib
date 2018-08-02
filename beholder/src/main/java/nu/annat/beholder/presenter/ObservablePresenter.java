@@ -1,18 +1,21 @@
 package nu.annat.beholder.presenter;
 
-import android.databinding.BaseObservable;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import androidx.databinding.BaseObservable;
+import androidx.recyclerview.widget.RecyclerView;
+import nu.annat.beholder.BeholderAdapter;
 
 /**
  * Presenter extending from databindings BaseObservable
  */
 public class ObservablePresenter extends BaseObservable implements ComponentInfo {
 	private ComponentPresenter delegate = new ComponentPresenter(this);
+
 
 	@Override
 	public int layoutHash() {
@@ -67,5 +70,15 @@ public class ObservablePresenter extends BaseObservable implements ComponentInfo
 	@Override
 	public void restoreStates(Bundle extras) {
 
+	}
+
+	@Override
+	public BeholderAdapter<?> getAdapter() {
+		return delegate.getAdapter();
+	}
+
+	@Override
+	public void setAdapter(BeholderAdapter<?> adapter) {
+		delegate.setAdapter(adapter);
 	}
 }

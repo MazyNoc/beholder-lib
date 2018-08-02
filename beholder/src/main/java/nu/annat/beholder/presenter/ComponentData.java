@@ -1,7 +1,6 @@
 package nu.annat.beholder.presenter;
 
-import android.databinding.ViewDataBinding;
-
+import androidx.databinding.ViewDataBinding;
 import nu.annat.beholder.ViewInformation;
 import nu.annat.beholder.action.ActionHandler;
 

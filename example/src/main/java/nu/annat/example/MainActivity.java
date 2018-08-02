@@ -1,14 +1,15 @@
 package nu.annat.example;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import nu.annat.beholder.BeholderAdapter;
 import nu.annat.beholder.ComponentFactory;
 import nu.annat.beholder.ComponentFactory.Component;
@@ -45,18 +46,39 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 			"'component':'DualLineData'," +
 			"'data':{" +
 			"'header':'weff'}}]";
-		List<ComponentInfo> arr = converter.convert(json);
+		//	List<ComponentInfo> arr = converter.convert(json);
 
-		ActionHandler handler = getActionHandler();
-		binding.list.swapAdapter(new BeholderAdapter(factory, arr, handler), false);
-
-		CardData componentInfos = new CardData(
+		List<ComponentInfo> arr = new ArrayList<>();
+		arr.clear();
+		arr.add(new ListLayoutPresenter(
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
+			new DualLineData("first header", "first text"),
 			new DualLineData("first header", "first text"),
 			new DualLineData("second header", "second text")
-		);
+		));
 
-		componentViewHolder = factory.create(componentInfos, binding.place, null);
-		binding.place.addView(componentViewHolder.itemView);
+		ActionHandler handler = getActionHandler();
+		binding.list.swapAdapter(new BeholderAdapter<>(factory, arr, handler), false);
+
+//		CardData componentInfos = new CardData(
+//			new DualLineData("first header", "first text"),
+//			new DualLineData("second header", "second text")
+//		);
+//
+//		componentViewHolder = factory.create(componentInfos, binding.place, null);
+//		binding.place.addView(componentViewHolder.itemView);
 
 	}
 
@@ -84,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 	}
 
 	public void executeToastAction(ToastAction action) {
+		action.data.setBody("clicked");
 		Toast.makeText(MainActivity.this, action.getMessage(), Toast.LENGTH_SHORT).show();
 	}
 
@@ -91,14 +114,15 @@ public class MainActivity extends AppCompatActivity implements Mockdata.Callback
 		// you can either send one, many or a collection in the constructor
 
 		ComponentFactory factory = new ComponentFactory(
-			new Component(SingleLineData.class, SingleLineComponent::new, R.layout.single_line_layout)
+			new Component<>(SingleLineData.class, SingleLineComponent::new, R.layout.single_line_layout)
 		);
 
 		// or register one, many or a collection through the registerComponent or registerComponents
 		factory.registerComponents(
-			new Component(DualLineData.class, DualLineComponent::new, R.layout.dual_line_layout),
+			new Component<>(DualLineData.class, DualLineComponent::new, R.layout.dual_line_layout),
 			//new Component(CardData.class, CardComponent.class, R.layout.card)
-			new Component(CardData.class, CardComponent::new, R.layout.card)
+			new Component<>(CardData.class, CardComponent::new, R.layout.card),
+			new Component<>(ListLayoutPresenter.class, ListLayoutComponent::new, R.layout.list_layout)
 		);
 
 		return factory;

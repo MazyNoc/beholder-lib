@@ -1,9 +1,6 @@
 package nu.annat.beholder;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -19,6 +16,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
@@ -128,16 +128,23 @@ public class ComponentFactory {
 	public <T extends ComponentViewHolder> T createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, @NonNull ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
 		final Stats deepLayoutStats = Stats.start("Create Deep " + componentInfo.getClass().getSimpleName() + ", with deep id " + componentInfo.deepLayoutHash());
 		T holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
-		if (bindPresenter) holder.setData(componentInfo, force);
-		if (!componentInfo.getChildren().isEmpty() && holder instanceof ComponentGroup) {
-			ComponentGroup componentGroup = (ComponentGroup) holder;
-			int childOrder = 0;
-			depth++;
-			for (final ComponentInfo component : componentInfo.getChildren()) {
-				ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, bindPresenter, actionHandler);
-				componentGroup.addChild(deep);
+		// has children
+		if (!componentInfo.getChildren().isEmpty()) {
+			if (holder instanceof ComponentGroup) {
+				ComponentGroup componentGroup = (ComponentGroup) holder;
+				int childOrder = 0;
+				depth++;
+				for (final ComponentInfo component : componentInfo.getChildren()) {
+					ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, bindPresenter, actionHandler);
+					componentGroup.addChild(deep);
+				}
+			} else if (holder instanceof ComponentAdapterGroup) {
+				ComponentAdapterGroup componentGroup = (ComponentAdapterGroup) holder;
+				depth++;
+				componentInfo.setAdapter(new BeholderAdapter<>(this, depth, componentInfo.getChildren(), actionHandler, componentGroup.hasStableIds()));
 			}
 		}
+		if (bindPresenter) holder.setData(componentInfo, force);
 		if (loggingEnabled) Log.v(TAG, deepLayoutStats.stop());
 		return holder;
 	}

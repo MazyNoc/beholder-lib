@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import nu.annat.beholder.BeholderAdapter;
+
 /**
  * This interface ensures that all layouts can get a unique value to allow for reusing the same layout
  * in a Recyclerview or own framework.
@@ -42,4 +44,8 @@ public interface ComponentInfo extends Iterable<ComponentInfo> {
 	void saveStates(Bundle extras);
 
 	void restoreStates(Bundle extras);
+
+	BeholderAdapter<?> getAdapter();
+
+	void setAdapter(BeholderAdapter<?> adapter);
 }

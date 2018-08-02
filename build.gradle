@@ -1,15 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.2.60'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-alpha14'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha03'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'org.ajoberstar:gradle-git:0.6.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -38,7 +40,7 @@ import org.ajoberstar.gradle.git.tasks.GitPush
 import org.ajoberstar.gradle.git.tasks.GitTag
 
 ext {
-    niceVersion = "0.9.17"
+    niceVersion = "0.9.18-beta1"
 }
 
 task createTag(type: GitTag) {

@@ -1,9 +1,9 @@
 package nu.annat.beholder;
 
-import android.databinding.ViewDataBinding;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;

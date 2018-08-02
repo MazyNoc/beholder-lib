@@ -1,6 +1,6 @@
 package nu.annat.beholder;
 
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 /**
  * The ViewInformation differs from ComponentInfo based presenters in the way its assigned to the view.

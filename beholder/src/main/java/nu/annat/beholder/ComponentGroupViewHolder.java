@@ -1,12 +1,10 @@
 package nu.annat.beholder;
 
-import android.databinding.ViewDataBinding;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import nu.annat.beholder.action.ActionHandler;
+import androidx.databinding.ViewDataBinding;
 import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
 

@@ -3,6 +3,7 @@ package nu.annat.beholder;
 import android.view.View;
 
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentData;
@@ -14,6 +15,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 	protected final ActionHandler actionHandler;
 	private final int layoutId;
 	private final int reuseId;
+	protected LifecycleOwner lifecycleOwner;
 	protected ViewInformation viewInformation;
 	protected PRESENTER presenter;
 	private boolean attached;
@@ -36,6 +38,7 @@ public abstract class ComponentViewHolder<BINDING extends ViewDataBinding, PRESE
 		//noinspection unchecked
 		this.binding = (BINDING) baseData.binding;
 		this.viewInformation = baseData.viewInformation;
+		this.lifecycleOwner = baseData.lifecycleOwner;
 		prepareView();
 	}
 

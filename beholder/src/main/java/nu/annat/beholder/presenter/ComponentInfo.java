@@ -45,7 +45,7 @@ public interface ComponentInfo extends Iterable<ComponentInfo> {
 
 	void restoreStates(Bundle extras);
 
-	BeholderAdapter<?> getAdapter();
+	BeholderAdapter<?> getChildAdapter();
 
-	void setAdapter(BeholderAdapter<?> adapter);
+	void setChildAdapter(BeholderAdapter<?> adapter);
 }

@@ -17,8 +17,8 @@ public abstract class ComponentAdapterViewHolder<BINDING extends ViewDataBinding
 	}
 
 	protected void dataChanged() {
-		if (presenter.getAdapter() != null) {
-			presenter.getAdapter().notifyDataSetChanged();
+		if (presenter.getChildAdapter() != null) {
+			presenter.getChildAdapter().notifyDataSetChanged();
 		}
 
 	}

@@ -18,7 +18,7 @@ public class ComponentPresenter implements ComponentInfo {
 
 	private final ComponentInfo base;
 	private final List<ComponentInfo> children = new ArrayList<>();
-	private BeholderAdapter<?> adapter;
+	private BeholderAdapter<?> childAdapter;
 
 	public ComponentPresenter() {
 		super();
@@ -96,13 +96,13 @@ public class ComponentPresenter implements ComponentInfo {
 	}
 
 	@Override
-	public BeholderAdapter<?> getAdapter() {
-		return adapter;
+	public BeholderAdapter<?> getChildAdapter() {
+		return childAdapter;
 	}
 
 	@Override
-	public void setAdapter(BeholderAdapter<?> adapter) {
-		this.adapter = adapter;
+	public void setChildAdapter(BeholderAdapter<?> adapter) {
+		this.childAdapter = adapter;
 	}
 
 }

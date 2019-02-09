@@ -73,12 +73,12 @@ public class ObservablePresenter extends BaseObservable implements ComponentInfo
 	}
 
 	@Override
-	public BeholderAdapter<?> getAdapter() {
-		return delegate.getAdapter();
+	public BeholderAdapter<?> getChildAdapter() {
+		return delegate.getChildAdapter();
 	}
 
 	@Override
-	public void setAdapter(BeholderAdapter<?> adapter) {
-		delegate.setAdapter(adapter);
+	public void setChildAdapter(BeholderAdapter<?> adapter) {
+		delegate.setChildAdapter(adapter);
 	}
 }

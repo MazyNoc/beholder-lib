@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentInfo;
@@ -17,29 +18,31 @@ public class BeholderAdapter< T extends ComponentInfo> extends RecyclerView.Adap
 
 	protected final ActionHandler actionHandler;
 	protected final List<T> data;
+	protected final LifecycleOwner lifecycleOwner;
 	protected final int baseDepth;
 	protected ComponentFactory factory;
 	protected SparseArray<ComponentInfo> cachedPresenters = new SparseArray<>();
 
 	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler) {
-		this(factory, 0, data, actionHandler, false);
+		this(factory, 0, data, actionHandler, null, false);
 	}
 
 	public BeholderAdapter(ComponentFactory factory, List<T> data, ActionHandler actionHandler, boolean hasStableIds) {
-		this(factory, 0, data, actionHandler, hasStableIds);
+		this(factory, 0, data, actionHandler, null, hasStableIds);
 	}
 
-	public BeholderAdapter(ComponentFactory factory, int baseDepth, List<T> data, ActionHandler actionHandler, boolean hasStableIds) {
+	public BeholderAdapter(ComponentFactory factory, int baseDepth, List<T> data, ActionHandler actionHandler, LifecycleOwner lifecycleOwner, boolean hasStableIds) {
 		this.factory = factory;
 		this.data = data;
 		this.actionHandler = actionHandler;
 		this.baseDepth = baseDepth;
+		this.lifecycleOwner = lifecycleOwner;
 		setHasStableIds(hasStableIds);
 	}
 
 	@Override
 	public ComponentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return factory.createReusable(cachedPresenters.get(viewType), this.baseDepth, parent, actionHandler);
+		return factory.createReusable(cachedPresenters.get(viewType), this.baseDepth, parent, lifecycleOwner, actionHandler);
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleOwner;
 import nu.annat.beholder.action.ActionHandler;
 import nu.annat.beholder.presenter.ComponentData;
 import nu.annat.beholder.presenter.ComponentInfo;
@@ -125,9 +126,9 @@ public class ComponentFactory {
 		}
 	}
 
-	public <T extends ComponentViewHolder> T createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, @NonNull ComponentInfo componentInfo, ViewGroup root, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
+	public <T extends ComponentViewHolder> T createDeep(int depth, int order, Class<? extends ComponentInfo> presenterClass, @NonNull ComponentInfo componentInfo, ViewGroup root, LifecycleOwner lifecycleOwner, boolean force, boolean bindPresenter, ActionHandler actionHandler) {
 		final Stats deepLayoutStats = Stats.start("Create Deep " + componentInfo.getClass().getSimpleName() + ", with deep id " + componentInfo.deepLayoutHash());
-		T holder = createView(depth, order, presenterClass, componentInfo, root, actionHandler);
+		T holder = createView(depth, order, presenterClass, componentInfo, root, lifecycleOwner, actionHandler);
 		// has children
 		if (!componentInfo.getChildren().isEmpty()) {
 			if (holder instanceof ComponentGroup) {
@@ -135,13 +136,13 @@ public class ComponentFactory {
 				int childOrder = 0;
 				depth++;
 				for (final ComponentInfo component : componentInfo.getChildren()) {
-					ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), force, bindPresenter, actionHandler);
+					ComponentViewHolder deep = createDeep(depth, childOrder++, component.getClass(), component, componentGroup.getChildArea(), lifecycleOwner, force, bindPresenter, actionHandler);
 					componentGroup.addChild(deep);
 				}
 			} else if (holder instanceof ComponentAdapterGroup) {
 				ComponentAdapterGroup componentGroup = (ComponentAdapterGroup) holder;
 				depth++;
-				componentInfo.setAdapter(new BeholderAdapter<>(this, depth, componentInfo.getChildren(), actionHandler, componentGroup.hasStableIds()));
+				componentInfo.setChildAdapter(new BeholderAdapter<>(this, depth, componentInfo.getChildren(), actionHandler, lifecycleOwner, componentGroup.hasStableIds()));
 			}
 		}
 		if (bindPresenter) holder.setData(componentInfo, force);
@@ -149,7 +150,7 @@ public class ComponentFactory {
 		return holder;
 	}
 
-	protected <T extends ComponentViewHolder> T createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
+	protected <T extends ComponentViewHolder> T createView(int depth, int order, Class<? extends ComponentInfo> presenterClass, ComponentInfo componentInfo, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
 		final Stats createViewStats = Stats.start("Create View " + componentInfo.getClass().getSimpleName());
 		Component it = getIt(presenterClass);
 		int layoutId = componentInfo.layoutHash();
@@ -166,7 +167,7 @@ public class ComponentFactory {
 		ViewInformation viewInformation = new ViewInformation(depth, order);
 
 		final Stats createViewHolderStats = Stats.start();
-		ComponentData componentData = new ComponentData(viewInformation, inflate, actionHandler, layoutId, reuseId);
+		ComponentData componentData = new ComponentData(viewInformation, inflate, lifecycleOwner, actionHandler, layoutId, reuseId);
 		T componentViewHolder = (T) it.vhc.create(componentData);
 		if (loggingEnabled) Log.v(TAG, createViewHolderStats.stop("Create Viewholder " + componentViewHolder.getClass().getSimpleName()));
 		if (loggingEnabled) Log.v(TAG, createViewStats.stop());
@@ -206,10 +207,11 @@ public class ComponentFactory {
 			ActionHandler actionHandler = groupViewHolder.getActionHandler();
 			ComponentInfo presenter = groupViewHolder.getPresenter();
 			ViewGroup parentVG = (ViewGroup) groupViewHolder.getChildArea();
+
 			int depth = viewInformation.getDepth() + 1;
 			int order = 0;
 			for (ComponentInfo componentInfo : presenter) {
-				groupViewHolder.addChild(createDeep(depth, order++, componentInfo.getClass(), componentInfo, parentVG, force, true, actionHandler));
+				groupViewHolder.addChild(createDeep(depth, order++, componentInfo.getClass(), componentInfo, parentVG, null, force, true, actionHandler));
 			}
 		}
 	}
@@ -221,7 +223,7 @@ public class ComponentFactory {
 			ViewInformation viewInformation = holder.getViewInformation();
 			parent.remove(holder);
 			ViewGroup parentVG = (ViewGroup) parent.itemView;
-			ComponentViewHolder newHolder = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo.getClass(), componentInfo, parentVG, force, true, holder.getActionHandler());
+			ComponentViewHolder newHolder = createDeep(viewInformation.getDepth(), viewInformation.getOrder(), componentInfo.getClass(), componentInfo, parentVG, null, force, true, holder.getActionHandler());
 			parent.addChild(newHolder);
 		} else {
 			if (loggingEnabled) Log.v(TAG, "ID match, update data");
@@ -303,24 +305,24 @@ public class ComponentFactory {
 		return components.get(presenterClass);
 	}
 
-	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
+	public <T extends ComponentViewHolder> T create(ComponentInfo componentInfo, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
+		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, lifecycleOwner, false, true, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T create(int order, ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, order, componentInfo.getClass(), componentInfo, root, false, true, actionHandler);
+	public <T extends ComponentViewHolder> T create(int order, ComponentInfo componentInfo, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
+		return (T) createDeep(0, order, componentInfo.getClass(), componentInfo, root, lifecycleOwner, false, true, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
+	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
+		return (T) createDeep(0, 0, componentInfo.getClass(), componentInfo, root, lifecycleOwner, false, false, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, int depth, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(depth, 0, componentInfo.getClass(), componentInfo, root, false, false, actionHandler);
+	public <T extends ComponentViewHolder> T createReusable(ComponentInfo componentInfo, int depth, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
+		return (T) createDeep(depth, 0, componentInfo.getClass(), componentInfo, root, lifecycleOwner, false, false, actionHandler);
 	}
 
-	public <T extends ComponentViewHolder> T createReusable(Class<? extends ComponentInfo> presenterClass, ViewGroup root, ActionHandler actionHandler) {
-		return (T) createDeep(0, 0, presenterClass, null, root, false, false, actionHandler);
+	public <T extends ComponentViewHolder> T createReusable(Class<? extends ComponentInfo> presenterClass, ViewGroup root, LifecycleOwner lifecycleOwner, ActionHandler actionHandler) {
+		return (T) createDeep(0, 0, presenterClass, null, root, lifecycleOwner, false, false, actionHandler);
 	}
 
 	public Collection<Class<? extends ComponentInfo>> getRegisteredPresenters() {
